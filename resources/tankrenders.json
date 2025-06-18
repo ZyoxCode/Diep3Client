@@ -25,5 +25,85 @@
                 }
             ]
         }
+    ],
+    "Twin": [
+        {
+            "path": [
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 7
+                    },
+                    "z-index": 1
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                1
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 7
+                    }
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        }
+    ],
+    "Sniper": [
+        {
+            "path": [
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 6
+                    }
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        }
     ]
 }

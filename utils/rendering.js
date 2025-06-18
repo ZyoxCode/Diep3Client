@@ -195,6 +195,48 @@ function renderWireFrameCircle(position, size, ctx, color = 'grey') {
     ctx.closePath();
 }
 
+
+function renderer(shape, ctx) {
+    ctx.fillStyle = `rgb(${shape.colors.fill[0]}, ${shape.colors.fill[1]}, ${shape.colors.fill[2]})`
+    ctx.strokeStyle = `rgb(${shape.colors.stroke[0]}, ${shape.colors.stroke[1]}, ${shape.colors.stroke[2]})`
+
+    ctx.beginPath();
+    if (shape.type == 'rect') {
+
+        let rV = rotateVertice([(shape.dimensions.x / 2 + shape.offset.x) * shape.multipliers.x * shape.multipliers.global, shape.offset.y * shape.multipliers.y * shape.multipliers.global], [0, 0], shape.rotation)
+        rV[0] = rV[0] + shape.center.x;
+        rV[1] = rV[1] + shape.center.y;
+        ctx.moveTo(screenX(rV[0]), screenY(rV[1]))
+
+        rV = rotateVertice([(-shape.dimensions.x / 2 + shape.offset.x) * shape.multipliers.x * shape.multipliers.global, shape.offset.y * shape.multipliers.y * shape.multipliers.global], [0, 0], shape.rotation)
+        rV[0] = rV[0] + shape.center.x;
+        rV[1] = rV[1] + shape.center.y;
+        ctx.lineTo(screenX(rV[0]), screenY(rV[1]))
+
+
+        rV = rotateVertice([(-shape.dimensions.x / 2 + shape.offset.x) * shape.multipliers.x * shape.multipliers.global * shape.aspect, (shape.dimensions.y + shape.offset.y) * shape.multipliers.y * shape.multipliers.global], [0, 0], shape.rotation)
+        rV[0] = rV[0] + shape.center.x;
+        rV[1] = rV[1] + shape.center.y;
+        ctx.lineTo(screenX(rV[0]), screenY(rV[1]))
+
+
+        rV = rotateVertice([(shape.dimensions.x / 2 + shape.offset.x) * shape.multipliers.x * shape.multipliers.global * shape.aspect, (shape.dimensions.y + shape.offset.y) * shape.multipliers.y * shape.multipliers.global], [0, 0], shape.rotation)
+        rV[0] = rV[0] + shape.center.x;
+        rV[1] = rV[1] + shape.center.y;
+        ctx.lineTo(screenX(rV[0]), screenY(rV[1]))
+
+
+    } else if (shape.type == 'circle') {
+        ctx.arc(screenX(shape.center.x), screenY(shape.center.y), shape.dimensions / GSRatio, 0, Math.PI * 2)
+    }
+
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+
+}
+
 function tankRenderer(object, ctx) {
     ctx.globalAlpha = object.fadeTimer / 20;
     ctx.lineWidth = 0.6 / GSRatio;
@@ -209,6 +251,8 @@ function tankRenderer(object, ctx) {
     for (let joint of object.attachedObjects) {
         joints.push(new Joint(joint))
     }
+
+    let renderList = [] // Player will be z-index 0
 
     for (let render of tankRenders[object.tankType]) {
 
@@ -233,78 +277,44 @@ function tankRenderer(object, ctx) {
 
 
 
+
         for (let shape of render.baseShapes) {
             if (shape.type == 'rect') {
-
+                let zIndex = -1;
+                if ('z-index' in shape) {
+                    zIndex = shape['z-index'];
+                }
+                let aspect = 1;
+                if ('aspect' in shape) {
+                    aspect = shape['aspect'];
+                }
                 ctx.beginPath();
                 let fillPreset = colorList['barrelGrey'].fill
-                ctx.fillStyle = `rgb(${fillPreset[0]}, ${fillPreset[1]}, ${fillPreset[2]})`
-
                 let strokePreset = colorList['barrelGrey'].stroke
-                ctx.strokeStyle = `rgb(${strokePreset[0]}, ${strokePreset[1]}, ${strokePreset[2]})`
 
+                renderList.push({ 'z-index': zIndex, 'type': shape.type, 'dimensions': shape.size, 'offset': shape.offset, 'rotation': rotation, 'center': point, 'multipliers': { 'global': sizeMultiplier, 'x': 1, 'y': yScaleMultiplier }, 'aspect': aspect, 'colors': { 'fill': fillPreset, 'stroke': strokePreset } })
 
-
-                let rV = rotateVertice([(shape.size.x / 2 + shape.offset.x) * sizeMultiplier, shape.offset.y * sizeMultiplier * yScaleMultiplier], [0, 0], rotation)
-                rV[0] = rV[0] + point.x;
-                rV[1] = rV[1] + point.y;
-
-                ctx.moveTo(screenX(rV[0]), screenY(rV[1]))
-                // rV = { 'x': rV[0], 'y': rV[1] }
-                // renderWireFrameCircle(rV, 2, ctx, 'black')
-
-                rV = rotateVertice([(-shape.size.x / 2 + shape.offset.x) * sizeMultiplier, shape.offset.y * sizeMultiplier * yScaleMultiplier], [0, 0], rotation)
-                rV[0] = rV[0] + point.x;
-                rV[1] = rV[1] + point.y;
-
-                ctx.lineTo(screenX(rV[0]), screenY(rV[1]))
-                // rV = { 'x': rV[0], 'y': rV[1] }
-
-                // renderWireFrameCircle(rV, 2, ctx, 'black')
-
-                rV = rotateVertice([(-shape.size.x / 2 + shape.offset.x) * sizeMultiplier, (shape.size.y + shape.offset.y) * sizeMultiplier * yScaleMultiplier], [0, 0], rotation)
-                rV[0] = rV[0] + point.x;
-                rV[1] = rV[1] + point.y;
-                // rV = { 'x': rV[0], 'y': rV[1] }
-
-                ctx.lineTo(screenX(rV[0]), screenY(rV[1]))
-
-                // renderWireFrameCircle(rV, 2, ctx, 'black')
-
-                rV = rotateVertice([(shape.size.x / 2 + shape.offset.x) * sizeMultiplier, (shape.size.y + shape.offset.y) * sizeMultiplier * yScaleMultiplier], [0, 0], rotation)
-                rV[0] = rV[0] + point.x;
-                rV[1] = rV[1] + point.y;
-
-                ctx.lineTo(screenX(rV[0]), screenY(rV[1]))
-
-                ctx.closePath();
-                ctx.fill();
-                ctx.stroke();
 
                 // rV = { 'x': rV[0], 'y': rV[1] }
 
                 // renderWireFrameCircle(rV, 2, ctx, 'black')
 
             }
-            renderWireFrameCircle(point, 2, ctx, 'black')
+            //renderWireFrameCircle(point, 2, ctx, 'black')
 
             //console.log(shape)
         }
 
         point = object.position;
-        fillPreset = getFlashColor(colorList[object.color].fill, FLASH_LAMBDA * object.flashTimer)
+        let fillPreset = getFlashColor(colorList[object.color].fill, FLASH_LAMBDA * object.flashTimer)
+        let strokePreset = getFlashColor(colorList[object.color].stroke, FLASH_LAMBDA * object.flashTimer)
 
-        ctx.fillStyle = `rgb(${fillPreset[0]}, ${fillPreset[1]}, ${fillPreset[2]})`
+        renderList.push({ 'z-index': 0, 'type': 'circle', 'dimensions': object.size, 'center': point, 'colors': { 'fill': fillPreset, 'stroke': strokePreset } })
+        renderList.sort((b, a) => b['z-index'] - a['z-index']);
 
-        strokePreset = getFlashColor(colorList[object.color].stroke, FLASH_LAMBDA * object.flashTimer)
-
-        ctx.strokeStyle = `rgb(${strokePreset[0]}, ${strokePreset[1]}, ${strokePreset[2]})`
-
-        ctx.beginPath();
-        ctx.arc(screenX(point.x), screenY(point.y), object.size / GSRatio, 0, Math.PI * 2)
-        ctx.fill();
-        ctx.stroke();
-        ctx.closePath();
+        for (let renderObject of renderList) {
+            renderer(renderObject, ctx);
+        }
     }
     //console.log(object)
 
