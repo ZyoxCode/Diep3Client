@@ -1,0 +1,23 @@
+{
+    "Basic": [
+        {
+            "path": [
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 4
+                    }
+                }
+            ]
+        }
+    ]
+}
