@@ -1,5 +1,5 @@
 let tankRenders;
-fetch('../client/resources/tankRenders.json')
+fetch('../resources/tankrenders.json')
     .then(response => response.json())
     .then(data => {
         tankRenders = data;
@@ -14,6 +14,12 @@ class Joint {
         this.animationBehaviour = info.animationBehaviour
         this.distanceToNextMultiplier = info.distanceToNextMultiplier;
 
+        this.animationValues = []
+        if ('animationValues' in info) {
+            this.animationValues = info.animationValues
+        }
+
+
 
         this.childJoints = [];
         for (let joint of info.childJoints) {
@@ -23,7 +29,7 @@ class Joint {
     propagate(path, lastCenter, lastRotation, sizeMultiplier, distanceToNextMultiplier = 1) {
         path.splice(0, 1);
 
-        console.log(sizeMultiplier, this.distanceFromLast * sizeMultiplier * distanceToNextMultiplier)
+        //console.log(sizeMultiplier, this.distanceFromLast * sizeMultiplier * distanceToNextMultiplier)
         let nV = {
             'x': lastCenter.x + this.perpendicularDistance * sizeMultiplier, 'y': lastCenter.y + this.distanceFromLast * sizeMultiplier * distanceToNextMultiplier
         }
@@ -41,7 +47,7 @@ class Joint {
         //console.log(rV)
 
         if (path.length == 0) {
-            return [rV, newRotation];
+            return [rV, newRotation, this.animationValues];
         } else {
             return this.childJoints[path[0]].propagate(path, rV, newRotation, sizeMultiplier, this.distanceToNextMultiplier)
         }
@@ -94,12 +100,11 @@ function renderShape(shape, gamePosition, rotate, color, sizeMultiplier, flashTi
 
 
     ctx.beginPath();
-    //console.log(shape, gamePosition)
+
     if (shape.type == 'circle') {
 
         ctx.beginPath();
-        //console.log(gamePosition)
-        //console.log(gamePosition, shape.size, sizeMultiplier.y)
+
         ctx.arc(screenX(gamePosition.x), screenY(gamePosition.y), (shape.size * sizeMultiplier.y) / GSRatio, 0, 2 * Math.PI);
         ctx.closePath();
         ctx.stroke();
@@ -132,11 +137,11 @@ function positionRecursor(renderList, object, offset, rotation, topLevel = false
         let newSizeMultiplier = sizeMultiplier
         let offset2 = { "x": object.position.x, "y": object.position.y }
 
-        //console.log(`Level ${level} Object Position:`, object.position, "Rotations:", rotation, object.rotation)
+
 
         for (let shape of object.shapes) {
             renderList.push({ 'shape': shape, 'offset': offset2, 'rotation': object.rotation, 'position': 0, 'color': object.color, 'sizeMultiplier': { 'x': sizeMultiplier, 'y': sizeMultiplier } })
-            //renderShape(shape, offset2, object.rotation)
+
         }
         if (object.attachedObjects.length > 0) {
             for (let subObject of object.attachedObjects) {
@@ -145,7 +150,7 @@ function positionRecursor(renderList, object, offset, rotation, topLevel = false
 
         }
     } else {
-        //console.log(object)
+
         let animationOffsets = {}
         if (object.hasAnimationTimer && object.animationTimer != 0) {
 
@@ -156,10 +161,9 @@ function positionRecursor(renderList, object, offset, rotation, topLevel = false
             animationOffsets = { 'sizeMultipliers': { 'x': 1, 'y': 1 }, 'positionOffset': { 'x': 0, 'y': 0 }, 'rotationOffset': 0 }
         }
         rV = rotateVertice([object.position.x * sizeMultiplier + offset.x, object.position.y * sizeMultiplier + offset.y], [offset.x, offset.y], rotation + object.rotation + animationOffsets.rotationOffset)
-        //console.log(rV)
+
         let offset2 = { "x": offset.x + rV[0], "y": offset.y + rV[1] }
-        //console.log(`Level ${level} Object Position:`, object.position, "Rotations:", rotation, object.facingRotation, object.rotation)
-        //console.log(rotation, object.facingRotation, object.rotation)
+
         for (let shape of object.shapes) {
             let zPos = 0;
 
@@ -170,7 +174,7 @@ function positionRecursor(renderList, object, offset, rotation, topLevel = false
             }
 
             renderList.push({ 'shape': shape, 'offset': offset2, 'rotation': object.rotation + rotation + object.facingRotation + animationOffsets.rotationOffset, 'position': zPos, 'color': object.color, 'sizeMultiplier': { 'x': sizeMultiplier * animationOffsets.sizeMultipliers.x, 'y': sizeMultiplier * animationOffsets.sizeMultipliers.y } })
-            // renderShape(shape, offset2, object.rotation + rotation + object.facingRotation)
+
         }
 
         if (object.attachedObjects.length > 0) {
@@ -194,7 +198,7 @@ function renderWireFrameCircle(position, size, ctx, color = 'grey') {
 function tankRenderer(object, ctx) {
     ctx.globalAlpha = object.fadeTimer / 20;
     ctx.lineWidth = 0.6 / GSRatio;
-    //console.log(tankRenders[object.tankType])
+
 
 
     let sizeMultiplier = object.size / object.attachmentReferenceSize;
@@ -207,13 +211,25 @@ function tankRenderer(object, ctx) {
     }
 
     for (let render of tankRenders[object.tankType]) {
-        //console.log(render.path)
-        let path = [...render.path];
 
-        //asconsole.log(path)
+        let path = [...render.path];
+        let animationBindings = [...render.animationBindings]
+
+
         let pointData = joints[path[0]].propagate(path, object.position, object.rotation, sizeMultiplier)
-        let point = pointData[0]
-        let rotation = pointData[1]
+        let point = pointData[0];
+        let rotation = pointData[1];
+        let animationValues = pointData[2];
+
+
+        let yScaleMultiplier = 1
+
+        for (let animation of animationBindings) {
+            if (animation.binding == 'yscale') {
+                yScaleMultiplier = animationValues[animation.index]
+            }
+        }
+
 
 
 
@@ -229,7 +245,7 @@ function tankRenderer(object, ctx) {
 
 
 
-                let rV = rotateVertice([(shape.size.x / 2 + shape.offset.x) * sizeMultiplier, shape.offset.y * sizeMultiplier], [0, 0], rotation)
+                let rV = rotateVertice([(shape.size.x / 2 + shape.offset.x) * sizeMultiplier, shape.offset.y * sizeMultiplier * yScaleMultiplier], [0, 0], rotation)
                 rV[0] = rV[0] + point.x;
                 rV[1] = rV[1] + point.y;
 
@@ -237,7 +253,7 @@ function tankRenderer(object, ctx) {
                 // rV = { 'x': rV[0], 'y': rV[1] }
                 // renderWireFrameCircle(rV, 2, ctx, 'black')
 
-                rV = rotateVertice([(-shape.size.x / 2 + shape.offset.x) * sizeMultiplier, shape.offset.y * sizeMultiplier], [0, 0], rotation)
+                rV = rotateVertice([(-shape.size.x / 2 + shape.offset.x) * sizeMultiplier, shape.offset.y * sizeMultiplier * yScaleMultiplier], [0, 0], rotation)
                 rV[0] = rV[0] + point.x;
                 rV[1] = rV[1] + point.y;
 
@@ -246,7 +262,7 @@ function tankRenderer(object, ctx) {
 
                 // renderWireFrameCircle(rV, 2, ctx, 'black')
 
-                rV = rotateVertice([(-shape.size.x / 2 + shape.offset.x) * sizeMultiplier, (shape.size.y + shape.offset.y) * sizeMultiplier], [0, 0], rotation)
+                rV = rotateVertice([(-shape.size.x / 2 + shape.offset.x) * sizeMultiplier, (shape.size.y + shape.offset.y) * sizeMultiplier * yScaleMultiplier], [0, 0], rotation)
                 rV[0] = rV[0] + point.x;
                 rV[1] = rV[1] + point.y;
                 // rV = { 'x': rV[0], 'y': rV[1] }
@@ -255,7 +271,7 @@ function tankRenderer(object, ctx) {
 
                 // renderWireFrameCircle(rV, 2, ctx, 'black')
 
-                rV = rotateVertice([(shape.size.x / 2 + shape.offset.x) * sizeMultiplier, (shape.size.y + shape.offset.y) * sizeMultiplier], [0, 0], rotation)
+                rV = rotateVertice([(shape.size.x / 2 + shape.offset.x) * sizeMultiplier, (shape.size.y + shape.offset.y) * sizeMultiplier * yScaleMultiplier], [0, 0], rotation)
                 rV[0] = rV[0] + point.x;
                 rV[1] = rV[1] + point.y;
 

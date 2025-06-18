@@ -17,6 +17,12 @@
                         "y": 4
                     }
                 }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
             ]
         }
     ]
