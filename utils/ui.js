@@ -102,17 +102,17 @@ class UI {
             }
 
             this.makeText(ctx, `${entry.name} - ${entry.tank}: ${displayText}`, canvas.width - width / 2 - offsetFromRight, offsetFromTop + 1 + i * spaceBetween, fontSize, 'white', fontSize / 5, 1, '#575757')
-            let renderList = [];
-            entry.mockup.position.x = gameX(canvas.width - width - offsetFromRight - 20)
-            entry.mockup.position.y = gameY(offsetFromTop + i * spaceBetween)
-            entry.mockup.color = color
-            positionRecursor(renderList, entry.mockup, { 'x': 0, 'y': 0 }, -45 * (Math.PI / 180), true, 1, entry.mockup.size / REFERENCE_SIZE)
-            renderList.sort((b, a) => b.position - a.position);
+            // let renderList = [];
+            // entry.mockup.position.x = gameX(canvas.width - width - offsetFromRight - 20)
+            // entry.mockup.position.y = gameY(offsetFromTop + i * spaceBetween)
+            // entry.mockup.color = color
+            // positionRecursor(renderList, entry.mockup, { 'x': 0, 'y': 0 }, -45 * (Math.PI / 180), true, 1, entry.mockup.size / REFERENCE_SIZE)
+            // renderList.sort((b, a) => b.position - a.position);
 
-            ctx.lineWidth = (1 / 5) / GSRatio;
-            for (let object of renderList) {
-                renderShape(object.shape, object.offset, object.rotation, object.color, object.sizeMultiplier, 0, 20)
-            }
+            // ctx.lineWidth = (1 / 5) / GSRatio;
+            // for (let object of renderList) {
+            //     renderShape(object.shape, object.offset, object.rotation, object.color, object.sizeMultiplier, 0, 20)
+            // }
         }
     }
     renderScoreBar(ctx, canvas, playerScore) {
