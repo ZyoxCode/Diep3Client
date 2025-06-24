@@ -1,0 +1,117 @@
+{
+    "Normal Square": [
+        {
+            "sizeMultiplier": 1,
+            "angle": 45,
+            "color": "squareYellow"
+        }
+    ],
+    "Beta Square": [
+        {
+            "sizeMultiplier": 1,
+            "angle": 45,
+            "color": "squareYellow"
+        },
+        {
+            "sizeMultiplier": 0.6,
+            "angle": 0,
+            "color": "squareYellow"
+        }
+    ],
+    "Alpha Square": [
+        {
+            "sizeMultiplier": 1,
+            "angle": 45,
+            "color": "squareYellow"
+        },
+        {
+            "sizeMultiplier": 0.6,
+            "angle": 0,
+            "color": "squareYellow"
+        },
+        {
+            "sizeMultiplier": 0.38,
+            "angle": 45,
+            "color": "squareYellow"
+        }
+    ],
+    "Normal Triangle": [
+        {
+            "sizeMultiplier": 1,
+            "angle": 0,
+            "color": "triangleRed"
+        }
+    ],
+    "Beta Triangle": [
+        {
+            "sizeMultiplier": 1,
+            "angle": 0,
+            "color": "triangleRed"
+        },
+        {
+            "sizeMultiplier": 0.34,
+            "angle": 60,
+            "color": "triangleRed"
+        }
+    ],
+    "Alpha Triangle": [
+        {
+            "sizeMultiplier": 1,
+            "angle": 0,
+            "color": "triangleRed"
+        },
+        {
+            "sizeMultiplier": 0.34,
+            "angle": 60,
+            "color": "triangleRed"
+        },
+        {
+            "sizeMultiplier": 0.1,
+            "angle": 0,
+            "color": "triangleRed"
+        }
+    ],
+    "Normal Pentagon": [
+        {
+            "sizeMultiplier": 1,
+            "angle": 0,
+            "color": "pentagonBlue"
+        }
+    ],
+    "Beta Pentagon": [
+        {
+            "sizeMultiplier": 1,
+            "angle": 0,
+            "color": "pentagonBlue"
+        },
+        {
+            "sizeMultiplier": 0.76,
+            "angle": 180,
+            "color": "pentagonBlue"
+        }
+    ],
+    "Alpha Pentagon": [
+        {
+            "sizeMultiplier": 1,
+            "angle": 0,
+            "color": "pentagonBlue"
+        },
+        {
+            "sizeMultiplier": 0.76,
+            "angle": 180,
+            "color": "pentagonBlue"
+        },
+        {
+            "sizeMultiplier": 0.5,
+            "angle": 0,
+            "color": "pentagonBlue"
+        }
+    ],
+    "Normal Hexagon": [
+        {
+            "sizeMultiplier": 1,
+            "angle": 0,
+            "color": "hexagonBlue"
+        }
+    ]
+}

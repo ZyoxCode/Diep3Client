@@ -5,6 +5,20 @@ fetch('../resources/tankrenders.json')
         tankRenders = data;
     });
 
+let polyRenders;
+fetch('../resources/polyrenders.json')
+    .then(response => response.json())
+    .then(data => {
+        polyRenders = data;
+    });
+
+let projRenders;
+fetch('../resources/projrenders.json')
+    .then(response => response.json())
+    .then(data => {
+        projRenders = data;
+    });
+
 class Joint {
     constructor(info) {
         this.distanceFromLast = info.distanceFromLast;
@@ -267,7 +281,7 @@ function tankRenderer(object, ctx) {
 
 
         let yScaleMultiplier = 1
-        console.log(render.path, point, rotation)
+        //console.log(render.path, point, rotation)
 
         for (let animation of animationBindings) {
             if (animation.binding == 'yscale') {
@@ -297,7 +311,7 @@ function tankRenderer(object, ctx) {
                 ctx.beginPath();
                 let fillPreset = colorList['barrelGrey'].fill
                 let strokePreset = colorList['barrelGrey'].stroke
-                console.log(render.path, { 'z-index': zIndex, 'type': shape.type, 'dimensions': shape.size, 'offset': shape.offset, 'rotation': rotation, 'center': point, 'multipliers': { 'global': sizeMultiplier, 'x': 1, 'y': newYScaleMultiplier }, 'aspect': aspect, 'colors': { 'fill': fillPreset, 'stroke': strokePreset } })
+                //console.log(render.path, { 'z-index': zIndex, 'type': shape.type, 'dimensions': shape.size, 'offset': shape.offset, 'rotation': rotation, 'center': point, 'multipliers': { 'global': sizeMultiplier, 'x': 1, 'y': newYScaleMultiplier }, 'aspect': aspect, 'colors': { 'fill': fillPreset, 'stroke': strokePreset } })
                 renderList.push({ 'z-index': zIndex, 'type': shape.type, 'dimensions': shape.size, 'offset': shape.offset, 'rotation': rotation, 'center': point, 'multipliers': { 'global': sizeMultiplier, 'x': 1, 'y': newYScaleMultiplier }, 'aspect': aspect, 'colors': { 'fill': fillPreset, 'stroke': strokePreset } })
 
             } else if (shape.type == 'circle') {
@@ -332,5 +346,113 @@ function tankRenderer(object, ctx) {
         for (let renderObject of renderList) {
             renderer(renderObject, ctx);
         }
+    }
+}
+
+
+function polygonRenderer(poly, ctx) {
+    //let renderList = [];
+    //console.log(poly)
+    ctx.globalAlpha = poly.fadeTimer / 20;
+    if (poly.sides == 0) {
+        for (let shape of polyRenders[poly.polygonType]) {
+            let fillPreset = getFlashColor(colorList[shape.color].fill, FLASH_LAMBDA * poly.flashTimer)
+            let strokePreset = getFlashColor(colorList[shape.color].stroke, FLASH_LAMBDA * poly.flashTimer)
+
+            ctx.fillStyle = `rgb(${fillPreset[0]}, ${fillPreset[1]}, ${fillPreset[2]})`
+            ctx.strokeStyle = `rgb(${strokePreset[0]}, ${strokePreset[1]}, ${strokePreset[2]})`
+            //console.log(shape)
+            ctx.beginPath();
+            ctx.arc(screenX(poly.position.x), screenY(poly.position.y), poly.size * shape.sizeMultiplier * (1 + (20 - poly.fadeTimer) * 0.04), 0, 2 * Math.PI);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.fill();
+        }
+    } else {
+        for (let shape of polyRenders[poly.polygonType]) {
+            let fillPreset = getFlashColor(colorList[shape.color].fill, FLASH_LAMBDA * poly.flashTimer)
+            let strokePreset = getFlashColor(colorList[shape.color].stroke, FLASH_LAMBDA * poly.flashTimer)
+
+            ctx.fillStyle = `rgb(${fillPreset[0]}, ${fillPreset[1]}, ${fillPreset[2]})`
+            ctx.strokeStyle = `rgb(${strokePreset[0]}, ${strokePreset[1]}, ${strokePreset[2]})`
+            //console.log(shape)
+            ctx.beginPath();
+            for (let i = 0; i < poly.sides; i++) {
+                //console.log(i)
+
+                let rV = rotateVertice([0, poly.size * shape.sizeMultiplier * (1 + (20 - poly.fadeTimer) * 0.04)], [0, 0], shape.angle * (Math.PI / 180) + ((Math.PI * 2) / poly.sides) * i + poly.rotation)
+                if (i == 0) {
+                    ctx.moveTo(screenX(rV[0] + poly.position.x), screenY(rV[1] + poly.position.y))
+                } else {
+                    ctx.lineTo(screenX(rV[0] + poly.position.x), screenY(rV[1] + poly.position.y))
+                }
+
+            }
+            ctx.closePath();
+            ctx.stroke();
+            ctx.fill();
+        }
+    }
+
+    ctx.globalAlpha = 1;
+
+}
+
+function projectileRender(proj, ctx) {
+
+    ctx.globalAlpha = proj.fadeTimer / 20;
+    let preset = projRenders[proj.shapeType]
+    if (preset.renderType == "simple") {
+        for (let shape of preset.shapes) {
+            let color;
+            if (shape.color != 'barrelGrey') {
+
+                if (proj.belongsId != id) {
+                    color = 'playerRed';
+                } else {
+                    color = 'playerBlue';
+                }
+            } else {
+                color = 'barrelGrey';
+            }
+            let fillPreset = getFlashColor(colorList[color].fill, FLASH_LAMBDA * proj.flashTimer)
+            let strokePreset = getFlashColor(colorList[color].stroke, FLASH_LAMBDA * proj.flashTimer)
+
+            ctx.fillStyle = `rgb(${fillPreset[0]}, ${fillPreset[1]}, ${fillPreset[2]})`
+            ctx.strokeStyle = `rgb(${strokePreset[0]}, ${strokePreset[1]}, ${strokePreset[2]})`
+
+            ctx.beginPath();
+            if (shape.type == 'circle') {
+
+
+                ctx.arc(screenX(proj.position.x), screenY(proj.position.y), (proj.size * shape.sizeMultiplier * (1 + (20 - proj.fadeTimer) * 0.04)) / GSRatio, 0, 2 * Math.PI);
+
+
+            } else if (shape.type == 'concave') {
+
+
+                for (let i = 0; i < shape.sides; i++) {
+                    console.log(i)
+                    let rV = rotateVertice([0, proj.size * shape.sizeMultiplier * (1 + (20 - proj.fadeTimer) * 0.04)], [0, 0], shape.angle * (Math.PI / 180) + ((Math.PI * 2) / shape.sides) * i + proj.rotation)
+                    if (i == 0) {
+                        ctx.moveTo(screenX(rV[0] + proj.position.x), screenY(rV[1] + proj.position.y))
+                    } else {
+                        ctx.lineTo(screenX(rV[0] + proj.position.x), screenY(rV[1] + proj.position.y))
+                    }
+
+                    rV = rotateVertice([0, proj.size * shape.sizeMultiplier * shape.outerMultiplier * (1 + (20 - proj.fadeTimer) * 0.04)], [0, 0], shape.angle * (Math.PI / 180) + ((Math.PI * 2) / shape.sides) * (i + 1 / 2) + proj.rotation)
+
+                    ctx.lineTo(screenX(rV[0] + proj.position.x), screenY(rV[1] + proj.position.y))
+
+                }
+            }
+
+            ctx.closePath();
+            ctx.stroke();
+            ctx.fill();
+        }
+
+        ctx.globalAlpha = 1;
+
     }
 }

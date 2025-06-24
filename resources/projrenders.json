@@ -1,0 +1,35 @@
+{
+    "circle": {
+        "renderType": "simple",
+        "shapes": [
+            {
+                "type": "circle",
+                "sizeMultiplier": 1
+            }
+        ]
+    },
+    "concave-triangle": {
+        "renderType": "simple",
+        "shapes": [
+            {
+                "type": "concave",
+                "sides": 3,
+                "sizeMultiplier": 1,
+                "outerMultiplier": 2.7,
+                "angle": 0
+            }
+        ]
+    },
+    "concave-square": {
+        "renderType": "simple",
+        "shapes": [
+            {
+                "type": "concave",
+                "sides": 4,
+                "sizeMultiplier": 1,
+                "outerMultiplier": 1.55,
+                "angle": 0
+            }
+        ]
+    }
+}

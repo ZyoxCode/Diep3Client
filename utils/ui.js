@@ -267,18 +267,18 @@ class UI {
 
             this.makeText(ctx, this.tankUpgradeOptions[i].name, spaceFromLeft + i * (size + spaceBetween) + size / 2, spaceFromTop + size - 10, 12, 'white', 2)
 
-            let entry = this.tankUpgradeOptions[i]
-            let renderList = [];
-            entry.mockup.position.x = gameX(spaceFromLeft + i * (size + spaceBetween) + size / 2)
-            entry.mockup.position.y = gameY(spaceFromTop + size / 2)
-            entry.mockup.size = 2
-            positionRecursor(renderList, entry.mockup, { 'x': 0, 'y': 0 }, -45 * (Math.PI / 180), true, 1, entry.mockup.size / REFERENCE_SIZE)
-            renderList.sort((b, a) => b.position - a.position);
+            // let entry = this.tankUpgradeOptions[i]
+            // let renderList = [];
+            // entry.mockup.position.x = gameX(spaceFromLeft + i * (size + spaceBetween) + size / 2)
+            // entry.mockup.position.y = gameY(spaceFromTop + size / 2)
+            // entry.mockup.size = 2
+            // positionRecursor(renderList, entry.mockup, { 'x': 0, 'y': 0 }, -45 * (Math.PI / 180), true, 1, entry.mockup.size / REFERENCE_SIZE)
+            // renderList.sort((b, a) => b.position - a.position);
 
-            ctx.lineWidth = (2 / 5) / GSRatio;
-            for (let object of renderList) {
-                renderShape(object.shape, object.offset, object.rotation, object.color, object.sizeMultiplier, 0, 20)
-            }
+            // ctx.lineWidth = (2 / 5) / GSRatio;
+            // for (let object of renderList) {
+            //     renderShape(object.shape, object.offset, object.rotation, object.color, object.sizeMultiplier, 0, 20)
+            // }
         }
     }
 

@@ -194,7 +194,7 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
     playerSize = data.players[id].size
     players = data.players
     projectiles = data.projectiles
-    polygons = data.polygons
+    polygons = data.polygons;
     immovables = data.immovables
     leaderboard = data.leaderboard
     ui.upgrades = data.players[id].upgrades
@@ -353,34 +353,26 @@ function animationLoop() {
     drawGrid(game.gridLines)
 
     ctx.lineWidth = 1 / GSRatio;
-    for (let projectile of projectiles) {
-        //console.log(projectile.position.x, projectile.position.y)
-        renderList = []
-        positionRecursor(renderList, projectile, { "x": 0, "y": 0 }, 0, true, 1, 1 + (20 - projectile.fadeTimer) * 0.04)
-        renderList.sort((b, a) => b.position - a.position);
-
-        for (let object of renderList) {
-            if (object.color == 'playerBlue' && id != projectile.belongsId) {
-                object.color = 'playerRed';
-            }
-            renderShape(object.shape, object.offset, object.rotation, object.color, object.sizeMultiplier, projectile.flashTimer, projectile.fadeTimer)
-        }
-
+    for (let proj of projectiles) {
+        projectileRender(proj, ctx);
     }
+    // for (let projectile of projectiles) {
+    //     //console.log(projectile.position.x, projectile.position.y)
+    //     renderList = []
+    //     positionRecursor(renderList, projectile, { "x": 0, "y": 0 }, 0, true, 1, 1 + (20 - projectile.fadeTimer) * 0.04)
+    //     renderList.sort((b, a) => b.position - a.position);
 
+    //     for (let object of renderList) {
+    //         if (object.color == 'playerBlue' && id != projectile.belongsId) {
+    //             object.color = 'playerRed';
+    //         }
+    //         renderShape(object.shape, object.offset, object.rotation, object.color, object.sizeMultiplier, projectile.flashTimer, projectile.fadeTimer)
+    //     }
+
+    // }
 
     for (let poly of polygons) {
-        //console.log(poly)
-        renderList = []
-        positionRecursor(renderList, poly, { "x": 0, "y": 0 }, 0, true, 1, 1 + (20 - poly.fadeTimer) * 0.04)
-        renderList.sort((b, a) => b.position - a.position);
-
-        ctx.lineWidth = 1 / GSRatio;
-        for (let object of renderList) {
-            renderShape(object.shape, object.offset, object.rotation, object.color, object.sizeMultiplier, poly.flashTimer, poly.fadeTimer)
-        }
-
-
+        polygonRenderer(poly, ctx)
         if (poly.hp > 0 && poly.hp / poly.maxHp != 1) {
 
             ctx.strokeStyle = "#4f4f4f";
@@ -414,6 +406,51 @@ function animationLoop() {
             ctx.lineWidth = 1 / GSRatio;
         }
     }
+    // for (let poly of polygons) {
+    //     //console.log(poly)
+    //     renderList = []
+    //     positionRecursor(renderList, poly, { "x": 0, "y": 0 }, 0, true, 1, 1 + (20 - poly.fadeTimer) * 0.04)
+    //     renderList.sort((b, a) => b.position - a.position);
+
+    //     ctx.lineWidth = 1 / GSRatio;
+    //     for (let object of renderList) {
+    //         renderShape(object.shape, object.offset, object.rotation, object.color, object.sizeMultiplier, poly.flashTimer, poly.fadeTimer)
+    //     }
+
+
+    //     if (poly.hp > 0 && poly.hp / poly.maxHp != 1) {
+
+    //         ctx.strokeStyle = "#4f4f4f";
+    //         ctx.lineWidth = 0.6 / GSRatio;
+    //         ctx.beginPath();
+    //         ctx.roundRect(screenX(poly.position.x) - 7 * poly.size, screenY(poly.position.y) + 8 + 10 * poly.size, 14 * poly.size, 4, 2)
+    //         ctx.stroke();
+    //         ctx.closePath();
+
+    //         if (poly.hp / poly.maxHp >= 0.7) {
+    //             ctx.fillStyle = "#a7db76";
+    //             //ctx.strokeStyle = "#a7db76";
+    //         } else if (poly.hp / poly.maxHp >= 0.4) {
+    //             ctx.fillStyle = "#e3d368";
+    //             //ctx.strokeStyle = "#e3d368";
+    //         } else {
+    //             ctx.fillStyle = "#d65440";
+    //             //ctx.strokeStyle = "#d65440";
+    //         }
+
+    //         ctx.lineWidth = 0.6 / GSRatio;
+    //         ctx.beginPath();
+
+    //         ctx.roundRect(screenX(poly.position.x) - 7 * poly.size, screenY(poly.position.y) + 8 + 10 * poly.size, 14 * poly.size * (poly.hp / poly.maxHp), 4, 2)
+    //         // ctx.moveTo(screenX(poly.position.x + 3), screenY(poly.position.y - 5));
+    //         // ctx.lineTo(screenX(poly.position.x + 3 - 6 * (poly.hp / poly.maxHp)), screenY(poly.position.y - 5))
+    //         //ctx.stroke();
+    //         ctx.fill();
+
+    //         ctx.closePath();
+    //         ctx.lineWidth = 1 / GSRatio;
+    //     }
+    // }
 
     for (let i in players) {
 
