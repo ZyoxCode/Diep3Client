@@ -406,6 +406,7 @@ function animationLoop() {
             ctx.lineWidth = 1 / GSRatio;
         }
     }
+
     // for (let poly of polygons) {
     //     //console.log(poly)
     //     renderList = []
@@ -531,14 +532,16 @@ function animationLoop() {
 
     for (let immovable of immovables) {
         //console.log(immovable)
-        renderList = []
-        positionRecursor(renderList, immovable, { "x": 0, "y": 0 }, 0, true, 1, 1)
-        renderList.sort((b, a) => b.position - a.position);
-
         ctx.lineWidth = 1 / GSRatio;
-        for (let object of renderList) {
-            renderShape(object.shape, object.offset, object.rotation, object.color, object.sizeMultiplier, 0, 20)
-        }
+        polygonRenderer(immovable, ctx);
+        // renderList = []
+        // positionRecursor(renderList, immovable, { "x": 0, "y": 0 }, 0, true, 1, 1)
+        // renderList.sort((b, a) => b.position - a.position);
+
+        // ctx.lineWidth = 1 / GSRatio;
+        // for (let object of renderList) {
+        //     renderShape(object.shape, object.offset, object.rotation, object.color, object.sizeMultiplier, 0, 20)
+        // }
     }
 
     if (id != 0 && id in players) {

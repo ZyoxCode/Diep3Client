@@ -102,7 +102,7 @@
             "color": "pentagonBlue"
         },
         {
-            "sizeMultiplier": 0.5,
+            "sizeMultiplier": 0.58,
             "angle": 0,
             "color": "pentagonBlue"
         }
@@ -112,6 +112,13 @@
             "sizeMultiplier": 1,
             "angle": 0,
             "color": "hexagonBlue"
+        }
+    ],
+    "immovable": [
+        {
+            "sizeMultiplier": 1,
+            "angle": 0,
+            "color": "wallGrey"
         }
     ]
 }
