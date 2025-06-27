@@ -1,5 +1,5 @@
 {
-    "circle": {
+    "Basic Bullet": {
         "renderType": "simple",
         "shapes": [
             {
@@ -8,7 +8,7 @@
             }
         ]
     },
-    "concave-triangle": {
+    "Triangular Trap": {
         "renderType": "simple",
         "shapes": [
             {
@@ -20,7 +20,7 @@
             }
         ]
     },
-    "concave-square": {
+    "Square Set Trap": {
         "renderType": "simple",
         "shapes": [
             {
@@ -29,6 +29,114 @@
                 "sizeMultiplier": 1,
                 "outerMultiplier": 1.55,
                 "angle": 0
+            }
+        ]
+    },
+    "concave-triangle-turreted": {
+        "renderType": "jointed",
+        "shapes": [
+            {
+                "type": "concave",
+                "sides": 3,
+                "sizeMultiplier": 1,
+                "outerMultiplier": 2.7,
+                "angle": 0
+            }
+        ],
+        "renders": [
+            {
+                "path": [
+                    0
+                ],
+                "baseShapes": [
+                    {
+                        "type": "circle",
+                        "centering": "base",
+                        "offset": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "size": 6,
+                        "z-index": 3
+                    }
+                ],
+                "animationBindings": []
+            },
+            {
+                "path": [
+                    0,
+                    0
+                ],
+                "baseShapes": [
+                    {
+                        "type": "rect",
+                        "centering": "base",
+                        "offset": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "size": {
+                            "x": 8,
+                            "y": 5
+                        },
+                        "z-index": 2
+                    }
+                ],
+                "animationBindings": []
+            }
+        ]
+    },
+    "concave-square-turreted": {
+        "renderType": "jointed",
+        "shapes": [
+            {
+                "type": "concave",
+                "sides": 4,
+                "sizeMultiplier": 1,
+                "outerMultiplier": 1.55,
+                "angle": 0
+            }
+        ],
+        "renders": [
+            {
+                "path": [
+                    0
+                ],
+                "baseShapes": [
+                    {
+                        "type": "circle",
+                        "centering": "base",
+                        "offset": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "size": 4,
+                        "z-index": 3
+                    }
+                ],
+                "animationBindings": []
+            },
+            {
+                "path": [
+                    0,
+                    0
+                ],
+                "baseShapes": [
+                    {
+                        "type": "rect",
+                        "centering": "base",
+                        "offset": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "size": {
+                            "x": 4,
+                            "y": 4
+                        },
+                        "z-index": 2
+                    }
+                ],
+                "animationBindings": []
             }
         ]
     }

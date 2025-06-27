@@ -124,7 +124,7 @@ window.addEventListener('mousedown', e => {
 
     if (players[id].allowedUpgrade == true) {
         uReqResponse = ui.checkTankUpgradeRequest(mouse)
-        console.log(uReqResponse)
+        //console.log(uReqResponse)
         if (uReqResponse != 'None') {
             socket.emit("tankUpgradeRequest", uReqResponse)
         }
@@ -197,7 +197,8 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
     polygons = data.polygons;
     immovables = data.immovables
     leaderboard = data.leaderboard
-    ui.upgrades = data.players[id].upgrades
+    //console.log(data.players[id].skillUpgrades)
+    ui.upgrades = data.players[id].skillUpgrades;
     //ui.tankUpgradeOptions = data.players[id].upgradesTo;
 
 
@@ -356,20 +357,6 @@ function animationLoop() {
     for (let proj of projectiles) {
         projectileRender(proj, ctx);
     }
-    // for (let projectile of projectiles) {
-    //     //console.log(projectile.position.x, projectile.position.y)
-    //     renderList = []
-    //     positionRecursor(renderList, projectile, { "x": 0, "y": 0 }, 0, true, 1, 1 + (20 - projectile.fadeTimer) * 0.04)
-    //     renderList.sort((b, a) => b.position - a.position);
-
-    //     for (let object of renderList) {
-    //         if (object.color == 'playerBlue' && id != projectile.belongsId) {
-    //             object.color = 'playerRed';
-    //         }
-    //         renderShape(object.shape, object.offset, object.rotation, object.color, object.sizeMultiplier, projectile.flashTimer, projectile.fadeTimer)
-    //     }
-
-    // }
 
     for (let poly of polygons) {
         polygonRenderer(poly, ctx)
@@ -397,61 +384,12 @@ function animationLoop() {
             ctx.beginPath();
 
             ctx.roundRect(screenX(poly.position.x) - 7 * poly.size, screenY(poly.position.y) + 8 + 10 * poly.size, 14 * poly.size * (poly.hp / poly.maxHp), 4, 2)
-            // ctx.moveTo(screenX(poly.position.x + 3), screenY(poly.position.y - 5));
-            // ctx.lineTo(screenX(poly.position.x + 3 - 6 * (poly.hp / poly.maxHp)), screenY(poly.position.y - 5))
-            //ctx.stroke();
             ctx.fill();
 
             ctx.closePath();
             ctx.lineWidth = 1 / GSRatio;
         }
     }
-
-    // for (let poly of polygons) {
-    //     //console.log(poly)
-    //     renderList = []
-    //     positionRecursor(renderList, poly, { "x": 0, "y": 0 }, 0, true, 1, 1 + (20 - poly.fadeTimer) * 0.04)
-    //     renderList.sort((b, a) => b.position - a.position);
-
-    //     ctx.lineWidth = 1 / GSRatio;
-    //     for (let object of renderList) {
-    //         renderShape(object.shape, object.offset, object.rotation, object.color, object.sizeMultiplier, poly.flashTimer, poly.fadeTimer)
-    //     }
-
-
-    //     if (poly.hp > 0 && poly.hp / poly.maxHp != 1) {
-
-    //         ctx.strokeStyle = "#4f4f4f";
-    //         ctx.lineWidth = 0.6 / GSRatio;
-    //         ctx.beginPath();
-    //         ctx.roundRect(screenX(poly.position.x) - 7 * poly.size, screenY(poly.position.y) + 8 + 10 * poly.size, 14 * poly.size, 4, 2)
-    //         ctx.stroke();
-    //         ctx.closePath();
-
-    //         if (poly.hp / poly.maxHp >= 0.7) {
-    //             ctx.fillStyle = "#a7db76";
-    //             //ctx.strokeStyle = "#a7db76";
-    //         } else if (poly.hp / poly.maxHp >= 0.4) {
-    //             ctx.fillStyle = "#e3d368";
-    //             //ctx.strokeStyle = "#e3d368";
-    //         } else {
-    //             ctx.fillStyle = "#d65440";
-    //             //ctx.strokeStyle = "#d65440";
-    //         }
-
-    //         ctx.lineWidth = 0.6 / GSRatio;
-    //         ctx.beginPath();
-
-    //         ctx.roundRect(screenX(poly.position.x) - 7 * poly.size, screenY(poly.position.y) + 8 + 10 * poly.size, 14 * poly.size * (poly.hp / poly.maxHp), 4, 2)
-    //         // ctx.moveTo(screenX(poly.position.x + 3), screenY(poly.position.y - 5));
-    //         // ctx.lineTo(screenX(poly.position.x + 3 - 6 * (poly.hp / poly.maxHp)), screenY(poly.position.y - 5))
-    //         //ctx.stroke();
-    //         ctx.fill();
-
-    //         ctx.closePath();
-    //         ctx.lineWidth = 1 / GSRatio;
-    //     }
-    // }
 
     for (let i in players) {
 
@@ -463,16 +401,13 @@ function animationLoop() {
         ctx.lineWidth = 1 / GSRatio;
 
         renderList = []
-        //positionRecursor2(renderList, curPlayer, { "x": 0, "y": 0 }, 0, true, 1, (curPlayer.size / curPlayer.attachmentReferenceSize) + (20 - players[i].fadeTimer) * 0.04)
         tankRenderer(curPlayer, ctx)
-
-        renderList.sort((b, a) => b.position - a.position);
-        //console.log(renderList)
 
 
         for (let object of renderList) {
             //console.log(object)
-            //console.log(object)
+
+
             if (object.color == 'playerBlue' && id != players[i].id) {
                 object.color = 'playerRed';
             }
@@ -489,10 +424,10 @@ function animationLoop() {
             ctx.stroke();
             ctx.closePath();
 
-            if (curPlayer.hp / curPlayer.maxHp >= 0.7) {
+            if (curPlayer.hp / curPlayer.stats.maxHp >= 0.7) {
                 ctx.fillStyle = "#a7db76";
                 //ctx.strokeStyle = "#a7db76";
-            } else if (curPlayer.hp / curPlayer.maxHp >= 0.4) {
+            } else if (curPlayer.hp / curPlayer.stats.maxHp >= 0.4) {
                 ctx.fillStyle = "#e3d368";
                 //ctx.strokeStyle = "#e3d368";
             } else {
@@ -503,7 +438,7 @@ function animationLoop() {
             ctx.lineWidth = 0.6 / GSRatio;
             ctx.beginPath();
 
-            ctx.roundRect(screenX(curPlayer.position.x) - 20, screenY(curPlayer.position.y) + 25 + 7 * curPlayer.size, 40 * (curPlayer.hp / curPlayer.maxHp), 4, 2)
+            ctx.roundRect(screenX(curPlayer.position.x) - 20, screenY(curPlayer.position.y) + 25 + 7 * curPlayer.size, 40 * (curPlayer.hp / curPlayer.stats.maxHp), 4, 2)
             // ctx.moveTo(screenX(poly.position.x + 3), screenY(poly.position.y - 5));
             // ctx.lineTo(screenX(poly.position.x + 3 - 6 * (poly.hp / poly.maxHp)), screenY(poly.position.y - 5))
             //ctx.stroke();
@@ -534,14 +469,6 @@ function animationLoop() {
         //console.log(immovable)
         ctx.lineWidth = 1 / GSRatio;
         polygonRenderer(immovable, ctx);
-        // renderList = []
-        // positionRecursor(renderList, immovable, { "x": 0, "y": 0 }, 0, true, 1, 1)
-        // renderList.sort((b, a) => b.position - a.position);
-
-        // ctx.lineWidth = 1 / GSRatio;
-        // for (let object of renderList) {
-        //     renderShape(object.shape, object.offset, object.rotation, object.color, object.sizeMultiplier, 0, 20)
-        // }
     }
 
     if (id != 0 && id in players) {
@@ -555,7 +482,6 @@ function animationLoop() {
         if (players[id].allowedUpgrade == true) {
             ui.renderTankUpgrades(ctx, canvas, mouse);
         }
-        //ui.render(ctx, colorList, leaderboard)
     }
     requestAnimationFrame(animationLoop);
 

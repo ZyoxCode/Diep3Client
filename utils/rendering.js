@@ -19,6 +19,7 @@ fetch('../resources/projrenders.json')
         projRenders = data;
     });
 
+const ATTACHMENT_REFERENCE_SIZE = 5;
 class Joint {
     constructor(info) {
         this.distanceFromLast = info.distanceFromLast;
@@ -41,15 +42,13 @@ class Joint {
         }
     }
     propagate(path, lastCenter, lastRotation, sizeMultiplier, distanceToNextMultiplier = 1) {
+        //console.log(path, lastCenter, lastRotation, sizeMultiplier)
         path.splice(0, 1);
 
         //console.log(sizeMultiplier, this.distanceFromLast * sizeMultiplier * distanceToNextMultiplier)
         let nV = {
             'x': lastCenter.x + this.perpendicularDistance * sizeMultiplier, 'y': lastCenter.y + this.distanceFromLast * sizeMultiplier * distanceToNextMultiplier
         }
-
-
-
 
         let newRotation;
         if (this.rotationBehaviour == 'inherets') {
@@ -157,8 +156,8 @@ function positionRecursor(renderList, object, offset, rotation, topLevel = false
             renderList.push({ 'shape': shape, 'offset': offset2, 'rotation': object.rotation, 'position': 0, 'color': object.color, 'sizeMultiplier': { 'x': sizeMultiplier, 'y': sizeMultiplier } })
 
         }
-        if (object.attachedObjects.length > 0) {
-            for (let subObject of object.attachedObjects) {
+        if (object.joints.length > 0) {
+            for (let subObject of object.joints) {
                 positionRecursor(renderList, subObject, offset2, object.rotation + rotation, false, level + 1, newSizeMultiplier)
             }
 
@@ -191,8 +190,8 @@ function positionRecursor(renderList, object, offset, rotation, topLevel = false
 
         }
 
-        if (object.attachedObjects.length > 0) {
-            for (let subObject of object.attachedObjects) {
+        if (object.joints.length > 0) {
+            for (let subObject of object.joints) {
                 positionRecursor(renderList, subObject, offset2, object.rotation + rotation + animationOffsets.rotationOffset, false, level + 1, sizeMultiplier)
             }
 
@@ -241,7 +240,7 @@ function renderer(shape, ctx) {
 
 
     } else if (shape.type == 'circle') {
-        ctx.arc(screenX(shape.center.x), screenY(shape.center.y), shape.dimensions / GSRatio, 0, Math.PI * 2)
+        ctx.arc(screenX(shape.center.x), screenY(shape.center.y), (shape.dimensions * shape.multipliers.global) / GSRatio, 0, Math.PI * 2)
     }
 
     ctx.closePath();
@@ -257,24 +256,25 @@ function tankRenderer(object, ctx) {
 
 
 
-    let sizeMultiplier = (object.size / object.attachmentReferenceSize) + (20 - object.fadeTimer) * 0.04
+    let sizeMultiplier = (object.size / ATTACHMENT_REFERENCE_SIZE) + (20 - object.fadeTimer) * 0.04
 
 
 
     let joints = [];
-    for (let joint of object.attachedObjects) {
+    for (let joint of object.joints) {
         joints.push(new Joint(joint))
     }
 
     let renderList = [] // Player will be z-index 0
 
-    for (let render of tankRenders[object.tankType]) {
+    for (let render of tankRenders[object.tankoidPreset]) {
 
         let path = [...render.path];
         let animationBindings = [...render.animationBindings]
 
 
         let pointData = joints[path[0]].propagate(path, object.position, object.rotation, sizeMultiplier)
+        //console.log(pointData)
         let point = pointData[0];
         let rotation = pointData[1];
         let animationValues = pointData[2];
@@ -290,6 +290,7 @@ function tankRenderer(object, ctx) {
         }
 
         for (let shape of render.baseShapes) {
+
             let newYScaleMultiplier = yScaleMultiplier
 
             if ('animationOverride' in shape) {
@@ -298,6 +299,8 @@ function tankRenderer(object, ctx) {
                 }
 
             }
+
+
 
             if (shape.type == 'rect') {
                 let zIndex = -1;
@@ -333,14 +336,14 @@ function tankRenderer(object, ctx) {
         }
 
         point = object.position;
-        let color = object.color
-        if (object.color == 'playerBlue' && object.id != id) {
-            color = 'playerRed'
+        let color = "playerBlue"; // Temp
+        if (!(object.color == 'barrelGrey') && object.id != id) {
+            color = 'playerRed';
         }
         let fillPreset = getFlashColor(colorList[color].fill, FLASH_LAMBDA * object.flashTimer)
         let strokePreset = getFlashColor(colorList[color].stroke, FLASH_LAMBDA * object.flashTimer)
 
-        renderList.push({ 'z-index': 0, 'type': 'circle', 'dimensions': object.size * (1 + (20 - object.fadeTimer) * 0.04), 'center': point, 'colors': { 'fill': fillPreset, 'stroke': strokePreset } })
+        renderList.push({ 'z-index': 0, 'type': 'circle', 'dimensions': object.size * (1 + (20 - object.fadeTimer) * 0.04), 'center': point, 'colors': { 'fill': fillPreset, 'stroke': strokePreset }, 'multipliers': { 'global': 1, 'x': 1, 'y': 1 } })
         renderList.sort((b, a) => b['z-index'] - a['z-index']);
 
         for (let renderObject of renderList) {
@@ -399,60 +402,152 @@ function polygonRenderer(poly, ctx) {
 }
 
 function projectileRender(proj, ctx) {
+    //console.log(proj)
 
     ctx.globalAlpha = proj.fadeTimer / 20;
-    let preset = projRenders[proj.shapeType]
-    if (preset.renderType == "simple") {
-        for (let shape of preset.shapes) {
-            let color;
-            if (shape.color != 'barrelGrey') {
+    let preset = projRenders[proj.tankoidPreset]
 
-                if (proj.belongsId != id) {
-                    color = 'playerRed';
-                } else {
-                    color = 'playerBlue';
-                }
+    for (let shape of preset.shapes) {
+        let color;
+        if (shape.color != 'barrelGrey') {
+
+            if (proj.id != id) {
+                color = 'playerRed';
             } else {
-                color = 'barrelGrey';
+                color = 'playerBlue';
             }
-            let fillPreset = getFlashColor(colorList[color].fill, FLASH_LAMBDA * proj.flashTimer)
-            let strokePreset = getFlashColor(colorList[color].stroke, FLASH_LAMBDA * proj.flashTimer)
+        } else {
+            color = 'barrelGrey';
+        }
+        let fillPreset = getFlashColor(colorList[color].fill, FLASH_LAMBDA * proj.flashTimer)
+        let strokePreset = getFlashColor(colorList[color].stroke, FLASH_LAMBDA * proj.flashTimer)
 
-            ctx.fillStyle = `rgb(${fillPreset[0]}, ${fillPreset[1]}, ${fillPreset[2]})`
-            ctx.strokeStyle = `rgb(${strokePreset[0]}, ${strokePreset[1]}, ${strokePreset[2]})`
+        ctx.fillStyle = `rgb(${fillPreset[0]}, ${fillPreset[1]}, ${fillPreset[2]})`
+        ctx.strokeStyle = `rgb(${strokePreset[0]}, ${strokePreset[1]}, ${strokePreset[2]})`
 
-            ctx.beginPath();
-            if (shape.type == 'circle') {
-
-
-                ctx.arc(screenX(proj.position.x), screenY(proj.position.y), (proj.size * shape.sizeMultiplier * (1 + (20 - proj.fadeTimer) * 0.04)) / GSRatio, 0, 2 * Math.PI);
-
-
-            } else if (shape.type == 'concave') {
+        ctx.beginPath();
+        if (shape.type == 'circle') {
 
 
-                for (let i = 0; i < shape.sides; i++) {
-                    console.log(i)
-                    let rV = rotateVertice([0, proj.size * shape.sizeMultiplier * (1 + (20 - proj.fadeTimer) * 0.04)], [0, 0], shape.angle * (Math.PI / 180) + ((Math.PI * 2) / shape.sides) * i + proj.rotation)
-                    if (i == 0) {
-                        ctx.moveTo(screenX(rV[0] + proj.position.x), screenY(rV[1] + proj.position.y))
-                    } else {
-                        ctx.lineTo(screenX(rV[0] + proj.position.x), screenY(rV[1] + proj.position.y))
-                    }
+            ctx.arc(screenX(proj.position.x), screenY(proj.position.y), (proj.size * shape.sizeMultiplier * (1 + (20 - proj.fadeTimer) * 0.04)) / GSRatio, 0, 2 * Math.PI);
 
-                    rV = rotateVertice([0, proj.size * shape.sizeMultiplier * shape.outerMultiplier * (1 + (20 - proj.fadeTimer) * 0.04)], [0, 0], shape.angle * (Math.PI / 180) + ((Math.PI * 2) / shape.sides) * (i + 1 / 2) + proj.rotation)
 
+        } else if (shape.type == 'concave') {
+
+
+            for (let i = 0; i < shape.sides; i++) {
+
+                let rV = rotateVertice([0, proj.size * shape.sizeMultiplier * (1 + (20 - proj.fadeTimer) * 0.04)], [0, 0], shape.angle * (Math.PI / 180) + ((Math.PI * 2) / shape.sides) * i + proj.rotation)
+                if (i == 0) {
+                    ctx.moveTo(screenX(rV[0] + proj.position.x), screenY(rV[1] + proj.position.y))
+                } else {
                     ctx.lineTo(screenX(rV[0] + proj.position.x), screenY(rV[1] + proj.position.y))
-
                 }
-            }
 
-            ctx.closePath();
-            ctx.stroke();
-            ctx.fill();
+                rV = rotateVertice([0, proj.size * shape.sizeMultiplier * shape.outerMultiplier * (1 + (20 - proj.fadeTimer) * 0.04)], [0, 0], shape.angle * (Math.PI / 180) + ((Math.PI * 2) / shape.sides) * (i + 1 / 2) + proj.rotation)
+
+                ctx.lineTo(screenX(rV[0] + proj.position.x), screenY(rV[1] + proj.position.y))
+
+            }
         }
 
-        ctx.globalAlpha = 1;
-
+        ctx.closePath();
+        ctx.stroke();
+        ctx.fill();
     }
+
+    if (preset.renderType == "jointed") {
+        ctx.globalAlpha = proj.fadeTimer / 20;
+        ctx.lineWidth = 0.5 / GSRatio;
+
+
+
+        let sizeMultiplier = (proj.size / ATTACHMENT_REFERENCE_SIZE) * (1 + (20 - proj.fadeTimer) * 0.04)
+        //console.log(sizeMultiplier)
+
+
+
+        let joints = [];
+        for (let joint of proj.joints) {
+            joints.push(new Joint(joint))
+        }
+
+        let renderList = [] // Player will be z-index 0
+
+        for (let render of preset.renders) {
+
+            let path = [...render.path];
+            let animationBindings = [...render.animationBindings]
+
+
+            let pointData = joints[path[0]].propagate(path, proj.position, proj.rotation, sizeMultiplier)
+            let point = pointData[0];
+            let rotation = pointData[1];
+            let animationValues = pointData[2];
+
+
+            let yScaleMultiplier = 1
+            //console.log(render.path, point, rotation)
+
+            for (let animation of animationBindings) {
+                if (animation.binding == 'yscale') {
+                    yScaleMultiplier = animationValues[animation.index]
+                }
+            }
+
+            for (let shape of render.baseShapes) {
+                let newYScaleMultiplier = yScaleMultiplier
+                //console.log(shape.type)
+
+                if ('animationOverride' in shape) {
+                    if (shape.animationOverride == true) {
+                        newYScaleMultiplier = 1;
+                    }
+
+                }
+
+                if (shape.type == 'rect') {
+                    let zIndex = -1;
+                    if ('z-index' in shape) {
+                        zIndex = shape['z-index'];
+                    }
+                    let aspect = 1;
+                    if ('aspect' in shape) {
+                        aspect = shape['aspect'];
+                    }
+                    ctx.beginPath();
+                    let fillPreset = colorList['barrelGrey'].fill
+                    let strokePreset = colorList['barrelGrey'].stroke
+                    //console.log(sizeMultiplier)
+                    //console.log(render.path, { 'z-index': zIndex, 'type': shape.type, 'dimensions': shape.size, 'offset': shape.offset, 'rotation': rotation, 'center': point, 'multipliers': { 'global': sizeMultiplier, 'x': 1, 'y': newYScaleMultiplier }, 'aspect': aspect, 'colors': { 'fill': fillPreset, 'stroke': strokePreset } })
+                    renderList.push({ 'z-index': zIndex, 'type': shape.type, 'dimensions': shape.size, 'offset': shape.offset, 'rotation': rotation, 'center': point, 'multipliers': { 'global': sizeMultiplier, 'x': 1, 'y': newYScaleMultiplier }, 'aspect': aspect, 'colors': { 'fill': fillPreset, 'stroke': strokePreset } })
+
+                } else if (shape.type == 'circle') {
+                    let zIndex = -1;
+                    if ('z-index' in shape) {
+                        zIndex = shape['z-index'];
+                    }
+                    let aspect = 1;
+                    if ('aspect' in shape) {
+                        aspect = shape['aspect'];
+                    }
+                    ctx.beginPath();
+                    let fillPreset = colorList['barrelGrey'].fill
+                    let strokePreset = colorList['barrelGrey'].stroke
+
+                    renderList.push({ 'z-index': zIndex, 'type': shape.type, 'dimensions': shape.size, 'offset': shape.offset, 'rotation': rotation, 'center': point, 'multipliers': { 'global': sizeMultiplier, 'x': 1, 'y': newYScaleMultiplier }, 'aspect': aspect, 'colors': { 'fill': fillPreset, 'stroke': strokePreset } })
+                }
+
+            }
+
+            renderList.sort((b, a) => b['z-index'] - a['z-index']);
+
+            for (let renderObject of renderList) {
+                renderer(renderObject, ctx);
+            }
+        }
+    }
+    ctx.lineWidth = 1 / GSRatio;
+    ctx.globalAlpha = 1;
+
 }

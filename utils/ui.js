@@ -164,6 +164,7 @@ class UI {
         let spaceFromLeft = this.upgradesPanel.spaceFromLeft;
         let spaceFromBottom = this.upgradesPanel.spaceFromBottom;
         let max = 0;
+
         for (let i in this.upgrades) {
 
             this.makeCurvedBox(ctx, spaceFromLeft + width / 2, canvas.height - spaceFromBottom - max * spaceBetween, width, height, 0.8, 'gray', 3)
