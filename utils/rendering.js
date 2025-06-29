@@ -104,6 +104,7 @@ function rotateVertice2(vertice, pivot, angle) {
 function renderShape(shape, gamePosition, rotate, color, sizeMultiplier, flashTimer, fadeTimer) {
 
     ctx.globalAlpha = fadeTimer / 20;
+    ctx.lineWidth = 0.1 / GSRatio;
 
     let fillColor = getFlashColor(colorList[color].fill, flashTimer * FLASH_LAMBDA)
     let strokeColor = getFlashColor(colorList[color].stroke, flashTimer * FLASH_LAMBDA)
@@ -240,6 +241,7 @@ function renderer(shape, ctx) {
 
 
     } else if (shape.type == 'circle') {
+        ctx.lineWidth = 0.5 / GSRatio
         ctx.arc(screenX(shape.center.x), screenY(shape.center.y), (shape.dimensions * shape.multipliers.global) / GSRatio, 0, Math.PI * 2)
     }
 
@@ -406,7 +408,7 @@ function projectileRender(proj, ctx) {
 
     ctx.globalAlpha = proj.fadeTimer / 20;
     let preset = projRenders[proj.tankoidPreset]
-
+    let renderList = []
     for (let shape of preset.shapes) {
         let color;
         if (shape.color != 'barrelGrey') {
@@ -428,8 +430,17 @@ function projectileRender(proj, ctx) {
         ctx.beginPath();
         if (shape.type == 'circle') {
 
+            let zIndex = 0;
+            if ('z-index' in shape) {
+                zIndex = shape['z-index'];
+            }
+            let aspect = 1;
+            if ('aspect' in shape) {
+                aspect = shape['aspect'];
+            }
 
-            ctx.arc(screenX(proj.position.x), screenY(proj.position.y), (proj.size * shape.sizeMultiplier * (1 + (20 - proj.fadeTimer) * 0.04)) / GSRatio, 0, 2 * Math.PI);
+            renderList.push({ 'z-index': zIndex, 'type': shape.type, 'dimensions': proj.size, 'rotation': 0, 'center': proj.position, 'multipliers': { 'global': shape.sizeMultiplier * (1 + (20 - proj.fadeTimer) * 0.04), 'x': 1, 'y': 1 }, 'aspect': aspect, 'colors': { 'fill': fillPreset, 'stroke': strokePreset } })
+            //ctx.arc(screenX(proj.position.x), screenY(proj.position.y), (proj.size * shape.sizeMultiplier * (1 + (20 - proj.fadeTimer) * 0.04)) / GSRatio, 0, 2 * Math.PI);
 
 
         } else if (shape.type == 'concave') {
@@ -472,7 +483,7 @@ function projectileRender(proj, ctx) {
             joints.push(new Joint(joint))
         }
 
-        let renderList = [] // Player will be z-index 0
+        // Player will be z-index 0
 
         for (let render of preset.renders) {
 
@@ -515,7 +526,7 @@ function projectileRender(proj, ctx) {
                     if ('aspect' in shape) {
                         aspect = shape['aspect'];
                     }
-                    ctx.beginPath();
+                    //ctx.beginPath();
                     let fillPreset = colorList['barrelGrey'].fill
                     let strokePreset = colorList['barrelGrey'].stroke
                     //console.log(sizeMultiplier)
@@ -531,7 +542,7 @@ function projectileRender(proj, ctx) {
                     if ('aspect' in shape) {
                         aspect = shape['aspect'];
                     }
-                    ctx.beginPath();
+                    //ctx.beginPath();
                     let fillPreset = colorList['barrelGrey'].fill
                     let strokePreset = colorList['barrelGrey'].stroke
 
@@ -540,12 +551,13 @@ function projectileRender(proj, ctx) {
 
             }
 
-            renderList.sort((b, a) => b['z-index'] - a['z-index']);
 
-            for (let renderObject of renderList) {
-                renderer(renderObject, ctx);
-            }
         }
+    }
+    renderList.sort((b, a) => b['z-index'] - a['z-index']);
+
+    for (let renderObject of renderList) {
+        renderer(renderObject, ctx);
     }
     ctx.lineWidth = 1 / GSRatio;
     ctx.globalAlpha = 1;

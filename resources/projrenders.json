@@ -32,6 +32,102 @@
             }
         ]
     },
+    "Auto Square Set Trap": {
+        "renderType": "jointed",
+        "shapes": [
+            {
+                "type": "concave",
+                "sides": 4,
+                "sizeMultiplier": 1,
+                "outerMultiplier": 1.55,
+                "angle": 0
+            }
+        ],
+        "renders": [
+            {
+                "path": [
+                    0
+                ],
+                "baseShapes": [
+                    {
+                        "type": "circle",
+                        "centering": "base",
+                        "offset": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "size": 4,
+                        "z-index": 3
+                    }
+                ],
+                "animationBindings": []
+            },
+            {
+                "path": [
+                    0,
+                    0
+                ],
+                "baseShapes": [
+                    {
+                        "type": "rect",
+                        "centering": "base",
+                        "offset": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "size": {
+                            "x": 4,
+                            "y": 4
+                        },
+                        "z-index": 2
+                    }
+                ],
+                "animationBindings": [
+                    {
+                        "index": 0,
+                        "binding": "yscale"
+                    }
+                ]
+            }
+        ]
+    },
+    "Launcher Missile": {
+        "renderType": "jointed",
+        "shapes": [
+            {
+                "type": "circle",
+                "sizeMultiplier": 1
+            }
+        ],
+        "renders": [
+            {
+                "path": [
+                    0
+                ],
+                "baseShapes": [
+                    {
+                        "type": "rect",
+                        "centering": "base",
+                        "offset": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "size": {
+                            "x": 4,
+                            "y": 4
+                        },
+                        "z-index": -10
+                    }
+                ],
+                "animationBindings": [
+                    {
+                        "index": 0,
+                        "binding": "yscale"
+                    }
+                ]
+            }
+        ]
+    },
     "concave-triangle-turreted": {
         "renderType": "jointed",
         "shapes": [

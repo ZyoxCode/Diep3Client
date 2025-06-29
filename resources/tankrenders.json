@@ -277,7 +277,7 @@
             ]
         }
     ],
-    "Auto Trapper": [
+    "Tri-Trapper": [
         {
             "path": [
                 0
@@ -307,6 +307,362 @@
                         "y": 1.6
                     },
                     "aspect": 1.6
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                1
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 3
+                    }
+                },
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 3
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 1.6
+                    },
+                    "aspect": 1.6
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                2
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 3
+                    }
+                },
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 3
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 1.6
+                    },
+                    "aspect": 1.6
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        }
+    ],
+    "Hexa-Trapper": [
+        {
+            "path": [
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 3
+                    }
+                },
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 3
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 1.6
+                    },
+                    "aspect": 1.6
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                1
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 3
+                    }
+                },
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 3
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 1.6
+                    },
+                    "aspect": 1.6
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                2
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 3
+                    }
+                },
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 3
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 1.6
+                    },
+                    "aspect": 1.6
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                3
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 3
+                    }
+                },
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 3
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 1.6
+                    },
+                    "aspect": 1.6
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                4
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 3
+                    }
+                },
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 3
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 1.6
+                    },
+                    "aspect": 1.6
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                5
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 3
+                    }
+                },
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 3
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 1.6
+                    },
+                    "aspect": 1.6
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                6
+            ],
+            "baseShapes": [
+                {
+                    "type": "circle",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": 2.5,
+                    "z-index": 3
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                6,
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 3,
+                        "y": 3
+                    },
+                    "z-index": 2
                 }
             ],
             "animationBindings": [
@@ -504,6 +860,112 @@
                         "y": 4.8
                     },
                     "z-index": -2
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        }
+    ],
+    "Ordnance": [
+        {
+            "path": [
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 7
+                    },
+                    "z-index": -2
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                1
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 6,
+                        "y": 6
+                    },
+                    "z-index": -1
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                2
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4.2,
+                        "y": 4.5
+                    },
+                    "z-index": -3
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                3
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 4.2
+                    },
+                    "z-index": -3
                 }
             ],
             "animationBindings": [
@@ -961,7 +1423,7 @@
                         "x": 0,
                         "y": 0
                     },
-                    "size": 1.3,
+                    "size": 1.8,
                     "z-index": 3
                 }
             ],
@@ -985,7 +1447,7 @@
                         "x": 0,
                         "y": 0
                     },
-                    "size": 1.3,
+                    "size": 1.8,
                     "z-index": 3
                 }
             ],
@@ -1009,7 +1471,7 @@
                         "x": 0,
                         "y": 0
                     },
-                    "size": 1.3,
+                    "size": 1.8,
                     "z-index": 3
                 }
             ],
@@ -1121,7 +1583,7 @@
                         "x": 3.2,
                         "y": 1.5
                     },
-                    "z-index": 2
+                    "z-index": -5
                 }
             ],
             "animationBindings": [
@@ -1132,7 +1594,7 @@
             ]
         }
     ],
-    "Auto Three": [
+    "Auto-3": [
         {
             "path": [
                 0
@@ -1145,7 +1607,7 @@
                         "x": 0,
                         "y": 0
                     },
-                    "size": 2.5,
+                    "size": 3,
                     "z-index": -1
                 }
             ],
@@ -1168,7 +1630,7 @@
                         "x": 0,
                         "y": 0
                     },
-                    "size": 2.5,
+                    "size": 3,
                     "z-index": -1
                 }
             ],
@@ -1191,7 +1653,7 @@
                         "x": 0,
                         "y": 0
                     },
-                    "size": 2.5,
+                    "size": 3,
                     "z-index": -1
                 }
             ],
@@ -1284,6 +1746,316 @@
             ]
         }
     ],
+    "Auto-4": [
+        {
+            "path": [
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "circle",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": 3,
+                    "z-index": -1
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                1
+            ],
+            "baseShapes": [
+                {
+                    "type": "circle",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": 3,
+                    "z-index": -1
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                2
+            ],
+            "baseShapes": [
+                {
+                    "type": "circle",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": 3,
+                    "z-index": -1
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                3
+            ],
+            "baseShapes": [
+                {
+                    "type": "circle",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": 3,
+                    "z-index": -1
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                0,
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 1.6,
+                        "y": 2.7
+                    },
+                    "z-index": -2
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                0,
+                1
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 1.6,
+                        "y": 2.7
+                    },
+                    "z-index": -2
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                1,
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 1.6,
+                        "y": 2.7
+                    },
+                    "z-index": -2
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                1,
+                1
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 1.6,
+                        "y": 2.7
+                    },
+                    "z-index": -2
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                2,
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 1.6,
+                        "y": 2.7
+                    },
+                    "z-index": -2
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                2,
+                1
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 1.6,
+                        "y": 2.7
+                    },
+                    "z-index": -2
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                3,
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 1.6,
+                        "y": 2.7
+                    },
+                    "z-index": -2
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                3,
+                1
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 1.6,
+                        "y": 2.7
+                    },
+                    "z-index": -2
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        }
+    ],
     "Engineer": [
         {
             "path": [
@@ -1338,6 +2110,240 @@
                         "y": 1.6
                     },
                     "aspect": 1.3
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        }
+    ],
+    "Launcher": [
+        {
+            "path": [
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 5,
+                        "y": 5.5
+                    },
+                    "animationOverride": true
+                },
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 6.8,
+                        "y": 4.5
+                    }
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        }
+    ],
+    "Architect": [
+        {
+            "path": [
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "circle",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": 3.5,
+                    "z-index": -1
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                1
+            ],
+            "baseShapes": [
+                {
+                    "type": "circle",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": 3.5,
+                    "z-index": -1
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                2
+            ],
+            "baseShapes": [
+                {
+                    "type": "circle",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": 3.5,
+                    "z-index": -1
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                0,
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 5,
+                        "y": 4
+                    },
+                    "z-index": -2
+                },
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 4
+                    },
+                    "size": {
+                        "x": 5,
+                        "y": 1.2
+                    },
+                    "aspect": 1.2,
+                    "z-index": -3
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                1,
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 5,
+                        "y": 4
+                    },
+                    "z-index": -2
+                },
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 4
+                    },
+                    "size": {
+                        "x": 5,
+                        "y": 1.2
+                    },
+                    "aspect": 1.2,
+                    "z-index": -3
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                2,
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 5,
+                        "y": 4
+                    },
+                    "z-index": -2
+                },
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 4
+                    },
+                    "size": {
+                        "x": 5,
+                        "y": 1.2
+                    },
+                    "aspect": 1.2,
+                    "z-index": -3
                 }
             ],
             "animationBindings": [
