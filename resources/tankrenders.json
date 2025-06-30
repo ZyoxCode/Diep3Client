@@ -14,7 +14,7 @@
                     },
                     "size": {
                         "x": 4,
-                        "y": 4
+                        "y": 4.5
                     }
                 }
             ],
@@ -1396,7 +1396,7 @@
                     },
                     "size": {
                         "x": 4,
-                        "y": 6
+                        "y": 6.5
                     },
                     "z-index": -1
                 }
@@ -1422,7 +1422,7 @@
                     },
                     "size": {
                         "x": 4,
-                        "y": 4.8
+                        "y": 5.3
                     },
                     "z-index": -2
                 }
@@ -1448,9 +1448,141 @@
                     },
                     "size": {
                         "x": 4,
-                        "y": 4.8
+                        "y": 5.3
                     },
                     "z-index": -2
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        }
+    ],
+    "Penta Shot": [
+        {
+            "path": [
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 6.5
+                    },
+                    "z-index": -1
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                1
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 5.3
+                    },
+                    "z-index": -2
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                2
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 5.3
+                    },
+                    "z-index": -2
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                3
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 3.5
+                    },
+                    "z-index": -3
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                4
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "size": {
+                        "x": 4,
+                        "y": 3.5
+                    },
+                    "z-index": -3
                 }
             ],
             "animationBindings": [
