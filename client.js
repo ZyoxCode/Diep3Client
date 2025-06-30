@@ -2,6 +2,10 @@ const canvas = document.getElementById('main');
 const ctx = canvas.getContext('2d');
 const socket = io('http://localhost:3000');
 
+document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+});
+
 canvas.width = document.documentElement.clientWidth;
 canvas.height = document.documentElement.clientHeight;
 
@@ -116,25 +120,37 @@ window.addEventListener('mousemove', e => {
 });
 
 window.addEventListener('mousedown', e => {
-    let uReqResponse = ui.checkUpgradeRequest(canvas, mouse)
-    if (uReqResponse != 'None') {
-
-        socket.emit("upgradeRequest", uReqResponse)
-    }
-
-    if (players[id].allowedUpgrade == true) {
-        uReqResponse = ui.checkTankUpgradeRequest(mouse)
-        //console.log(uReqResponse)
+    if (e.button == 0) {
+        let uReqResponse = ui.checkUpgradeRequest(canvas, mouse)
         if (uReqResponse != 'None') {
-            socket.emit("tankUpgradeRequest", uReqResponse)
+
+            socket.emit("upgradeRequest", uReqResponse)
         }
+
+        if (players[id].allowedUpgrade == true) {
+            uReqResponse = ui.checkTankUpgradeRequest(mouse)
+            //console.log(uReqResponse)
+            if (uReqResponse != 'None') {
+                socket.emit("tankUpgradeRequest", uReqResponse)
+            }
+        }
+
+        socket.emit("requestingFire", {})
+    }
+    else if (e.button == 2) {
+        socket.emit("activateReverser", {})
     }
 
-    socket.emit("requestingFire", {})
+
 })
 
 window.addEventListener('mouseup', e => {
-    socket.emit("requestingCeaseFire", {})
+    if (e.button == 0) {
+        socket.emit("requestingCeaseFire", {})
+    } else if (e.button == 2) {
+        socket.emit("cancelReverser", {})
+    }
+
 })
 
 
@@ -213,7 +229,9 @@ socket.on('updateUpgrades', (data) => {
 });
 
 socket.on('updateTankUpgrades', (data) => {
+
     ui.tankUpgradeOptions = data.options
+
 })
 
 function getFlashColor(color, additive) {
@@ -313,6 +331,7 @@ let colorList = { // eventually move to JSON
     'green1': { "fill": [139, 196, 102], "stroke": [83, 120, 59] },
     'hexagonBlue': { "fill": [101, 201, 186], "stroke": [74, 135, 126] },
     'wallGrey': { "fill": [110, 110, 110], "stroke": [84, 84, 84] },
+    'borderColor': { "fill": [105, 105, 105], "stroke": [105, 105, 105] },
     'placeholder': { "fill": [], "stroke": [] },
 }
 
@@ -473,7 +492,7 @@ function animationLoop() {
 
     if (id != 0 && id in players) {
         ui.renderLeaderboard(ctx, canvas, leaderboard, id);
-        ui.renderScoreBar(ctx, canvas, playerScore);
+        ui.renderScoreBar(ctx, canvas, players[id]);
         ui.renderThisPlayerName(ctx, canvas, id)
         ui.renderBroadcasts(ctx, canvas);
 

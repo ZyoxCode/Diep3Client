@@ -110,9 +110,10 @@ function renderWireFrameCircle(position, size, ctx, color = 'grey') {
 }
 
 
-function renderer(shape, ctx) {
+function renderer(shape, ctx, lineWidthMultiplier = 1) {
     ctx.fillStyle = `rgb(${shape.colors.fill[0]}, ${shape.colors.fill[1]}, ${shape.colors.fill[2]})`
     ctx.strokeStyle = `rgb(${shape.colors.stroke[0]}, ${shape.colors.stroke[1]}, ${shape.colors.stroke[2]})`
+    ctx.lineWidth = (0.5 / GSRatio) * lineWidthMultiplier
 
     ctx.beginPath();
     if (shape.type == 'rect') {
@@ -141,7 +142,7 @@ function renderer(shape, ctx) {
 
 
     } else if (shape.type == 'circle') {
-        ctx.lineWidth = 0.5 / GSRatio
+
         ctx.arc(screenX(shape.center.x), screenY(shape.center.y), (shape.dimensions * shape.multipliers.global) / GSRatio, 0, Math.PI * 2)
     }
 
@@ -182,11 +183,12 @@ function tankRenderer(object, ctx) {
         let animationValues = pointData[2];
 
 
+
         let yScaleMultiplier = 1
         //console.log(render.path, point, rotation)
 
         for (let animation of animationBindings) {
-            if (animation.binding == 'yscale') {
+            if (animation.binding == 'yscale' && 'id' in object) {
                 yScaleMultiplier = animationValues[animation.index]
             }
         }
@@ -201,8 +203,6 @@ function tankRenderer(object, ctx) {
                 }
 
             }
-
-
 
             if (shape.type == 'rect') {
                 let zIndex = -1;
@@ -238,18 +238,28 @@ function tankRenderer(object, ctx) {
         }
 
         point = object.position;
+
         let color = "playerBlue"; // Temp
-        if (!(object.color == 'barrelGrey') && object.id != id) {
-            color = 'playerRed';
+        if ("id" in object) {
+            if (!(object.color == 'barrelGrey') && object.id != id) {
+                color = 'playerRed';
+            }
+        } else {
+            color = object.color
         }
+
         let fillPreset = getFlashColor(colorList[color].fill, FLASH_LAMBDA * object.flashTimer)
         let strokePreset = getFlashColor(colorList[color].stroke, FLASH_LAMBDA * object.flashTimer)
 
         renderList.push({ 'z-index': 0, 'type': 'circle', 'dimensions': object.size * (1 + (20 - object.fadeTimer) * 0.04), 'center': point, 'colors': { 'fill': fillPreset, 'stroke': strokePreset }, 'multipliers': { 'global': 1, 'x': 1, 'y': 1 } })
         renderList.sort((b, a) => b['z-index'] - a['z-index']);
-
+        //console.log(renderList)
+        let lineWidthMultiplier = 1;
+        if (!("id" in object)) {
+            lineWidthMultiplier = 0.4;
+        }
         for (let renderObject of renderList) {
-            renderer(renderObject, ctx);
+            renderer(renderObject, ctx, lineWidthMultiplier);
         }
     }
 }
@@ -359,6 +369,16 @@ function projectileRender(proj, ctx) {
 
                 ctx.lineTo(screenX(rV[0] + proj.position.x), screenY(rV[1] + proj.position.y))
 
+            }
+        } else if (shape.type == 'convex') {
+            for (let i = 0; i < shape.sides; i++) {
+
+                let rV = rotateVertice([0, proj.size * shape.sizeMultiplier * (1 + (20 - proj.fadeTimer) * 0.04)], [0, 0], shape.angle * (Math.PI / 180) + ((Math.PI * 2) / shape.sides) * i + proj.rotation)
+                if (i == 0) {
+                    ctx.moveTo(screenX(rV[0] + proj.position.x), screenY(rV[1] + proj.position.y))
+                } else {
+                    ctx.lineTo(screenX(rV[0] + proj.position.x), screenY(rV[1] + proj.position.y))
+                }
             }
         }
 
