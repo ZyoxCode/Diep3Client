@@ -3992,6 +3992,112 @@
             ]
         }
     ],
+    "Overlord": [
+        {
+            "path": [
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": -0.7
+                    },
+                    "size": {
+                        "x": 5.8,
+                        "y": 3.4
+                    },
+                    "aspect": 1.3
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                1
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": -0.7
+                    },
+                    "size": {
+                        "x": 5.8,
+                        "y": 3.4
+                    },
+                    "aspect": 1.3
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                2
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": -0.7
+                    },
+                    "size": {
+                        "x": 5.8,
+                        "y": 3.4
+                    },
+                    "aspect": 1.3
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                3
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": -0.7
+                    },
+                    "size": {
+                        "x": 5.8,
+                        "y": 3.4
+                    },
+                    "aspect": 1.3
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        }
+    ],
     "Headman": [
         {
             "path": [
@@ -4074,6 +4180,60 @@
         {
             "path": [
                 3
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": -0.7
+                    },
+                    "size": {
+                        "x": 8,
+                        "y": 3.6
+                    },
+                    "aspect": 1.2
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        }
+    ],
+    "Foreman": [
+        {
+            "path": [
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": -0.7
+                    },
+                    "size": {
+                        "x": 8,
+                        "y": 3.6
+                    },
+                    "aspect": 1.2
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        },
+        {
+            "path": [
+                1
             ],
             "baseShapes": [
                 {
