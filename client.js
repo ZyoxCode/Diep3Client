@@ -1,15 +1,12 @@
 const canvas = document.getElementById('main');
 const ctx = canvas.getContext('2d');
-const socket = io('http://localhost:3000');
+const socket = io('https://diep3server.oggyp.com');
 
 const saved = JSON.parse(sessionStorage.getItem('formData') || '{}');
 if (saved.text != '') {
 
     socket.emit('setUsername', { 'username': saved.text })
 }
-
-
-
 
 document.addEventListener('contextmenu', function (e) {
     e.preventDefault();
