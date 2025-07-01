@@ -350,7 +350,7 @@ ui.upgrades = {}
 
 
 function animationLoop() {
-    console.log(players[id])
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     canvas.width = document.documentElement.clientWidth;
@@ -440,7 +440,7 @@ function animationLoop() {
             }
             renderShape(object.shape, object.offset, object.rotation, object.color, object.sizeMultiplier, players[i].flashTimer, players[i].fadeTimer)
         }
-
+        console.log(players[id])
 
         if (curPlayer.hp > 0 && curPlayer.hp / curPlayer.maxHp != 1) {
 
