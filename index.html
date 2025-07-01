@@ -5,17 +5,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diep3</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="homestyles.css">
 
 </head>
 
 <body>
-    <canvas id="main"></canvas>
-    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
-    <script src="./utils/animations.js"></script>
-    <script src="./utils/rendering.js"></script>
-    <script src="./utils/ui.js"></script>
-    <script src="client.js"></script>
+    <h1 class="maintitle">
+        Diep3.io
+    </h1>
+    <h2>I'll think of a proper name later</h2>
+    <div class="mainbox">
+
+        <form id="myForm">
+            <input name="text" type="text" required />
+            <button id="joinBtn">Join Game</button>
+        </form>
+    </div>
+
 </body>
+
+
+<script>
+    document.getElementById('joinBtn').addEventListener('click', e => {
+        e.preventDefault();                     // stop normal nav
+        const form = document.getElementById('myForm');
+        const data = Object.fromEntries(new FormData(form));
+        sessionStorage.setItem('formData', JSON.stringify(data));
+        window.location = 'game.html';        // Manual navigation
+    });
+</script>
 
 </html>

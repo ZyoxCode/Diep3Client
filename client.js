@@ -2,6 +2,15 @@ const canvas = document.getElementById('main');
 const ctx = canvas.getContext('2d');
 const socket = io('http://localhost:3000');
 
+const saved = JSON.parse(sessionStorage.getItem('formData') || '{}');
+if (saved.text != '') {
+
+    socket.emit('setUsername', { 'username': saved.text })
+}
+
+
+
+
 document.addEventListener('contextmenu', function (e) {
     e.preventDefault();
 });
@@ -468,7 +477,7 @@ function animationLoop() {
         }
 
         if (curPlayer.id != id) {
-            ctx.globalAlpha = 0.7;
+
             ctx.font = 'bold 16px Ubuntu'
             ctx.fillStyle = 'white'
             ctx.strokeStyle = 'gray'
@@ -477,8 +486,8 @@ function animationLoop() {
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
 
-            ctx.strokeText(`${curPlayer.id}`, screenX(curPlayer.position.x), screenY(curPlayer.position.y + 8));
-            ctx.fillText(`${curPlayer.id}`, screenX(curPlayer.position.x), screenY(curPlayer.position.y + 8));
+            ctx.strokeText(`${curPlayer.username}`, screenX(curPlayer.position.x), screenY(curPlayer.position.y + 8));
+            ctx.fillText(`${curPlayer.username}`, screenX(curPlayer.position.x), screenY(curPlayer.position.y + 8));
             ctx.globalAlpha = 1;
         }
 
@@ -493,7 +502,7 @@ function animationLoop() {
     if (id != 0 && id in players) {
         ui.renderLeaderboard(ctx, canvas, leaderboard, id);
         ui.renderScoreBar(ctx, canvas, players[id]);
-        ui.renderThisPlayerName(ctx, canvas, id)
+        ui.renderThisPlayerName(ctx, canvas, players[id].username)
         ui.renderBroadcasts(ctx, canvas);
 
         ui.renderSkillUpgrades(ctx, canvas, mouse, players[id].allocatablePoints);
