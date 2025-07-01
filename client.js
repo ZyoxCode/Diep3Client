@@ -350,7 +350,7 @@ ui.upgrades = {}
 
 
 function animationLoop() {
-
+    console.log(players[id])
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     canvas.width = document.documentElement.clientWidth;
