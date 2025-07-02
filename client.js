@@ -249,6 +249,10 @@ socket.on('updateTankUpgrades', (data) => {
 
 })
 
+socket.on('playerDisconnected', (data) => {
+    delete players[data]
+})
+
 function getFlashColor(color, additive) {
     let r1 = color[0]
     let r2 = color[1]
