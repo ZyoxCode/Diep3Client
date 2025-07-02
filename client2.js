@@ -219,10 +219,7 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
                 players[id1][stat] = data.players[id1][stat]
             }
         }
-
-
     }
-
 
     playerX = players[id].position.x
     playerY = players[id].position.y

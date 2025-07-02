@@ -211,19 +211,26 @@ socket.on('init', (data) => {
 
 socket.on('gameState', (data) => { // I think in here we just put updating variables and then have a seperate loop for rendering
 
-    playerX = data.players[id].position.x
-    playerY = data.players[id].position.y
-    playerScore = data.players[id].score
-    playerAngle = data.players[id].rotation
-    playerSize = data.players[id].size
-    players = data.players
+    for (let id1 in data.players) {
+        if (!(id1 in players)) {
+            players[id1] = data.players[id1]
+        } else {
+            for (let stat in data.players[id1]) {
+                players[id1][stat] = data.players[id1][stat]
+            }
+        }
+    }
+
+    playerX = players[id].position.x
+    playerY = players[id].position.y
+    playerScore = players[id].score
+    playerAngle = players[id].rotation
+    playerSize = players[id].size
     projectiles = data.projectiles
     polygons = data.polygons;
     immovables = data.immovables
     leaderboard = data.leaderboard
-    //console.log(data.players[id].skillUpgrades)
-    ui.upgrades = data.players[id].skillUpgrades;
-    //ui.tankUpgradeOptions = data.players[id].upgradesTo;
+    ui.upgrades = players[id].skillUpgrades;
 
 
 });
