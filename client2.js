@@ -239,9 +239,9 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
         if (!(Object.keys(leaderboard).includes(id1))) {
             leaderboard[id1] = data.leaderboard[id1]
         } else {
-            console.log(data.leaderboard[id1])
+
             for (let stat in data.leaderboard[id1]) {
-                console.log(stat)
+
                 leaderboard[id1][stat] = data.leaderboard[id1][stat]
             }
         }
