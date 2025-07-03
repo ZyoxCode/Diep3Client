@@ -43,7 +43,7 @@ const keys = {};
 
 let players = {};
 let projectiles = [];
-let polygons = [];
+let polygons = {};
 let immovables = []; // might just group in with polygons
 let upgradeOptions = [];
 
@@ -204,12 +204,13 @@ socket.on('init', (data) => {
     game.gridLines = makeGrid(game.mapSize)
     console.log(players)
     console.log(game)
+
     drawGrid(game.gridLines)
 
 });
 
 socket.on('gameState', (data) => { // I think in here we just put updating variables and then have a seperate loop for rendering
-
+    console.log(data.fullPolygonList.length)
     for (let id1 in data.players) {
 
         if (!(id1 in players)) {
@@ -221,13 +222,39 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
         }
     }
 
+    for (let id1 in data.polygons) {
+
+        if (!(id1 in polygons)) {
+            polygons[id1] = data.polygons[id1]
+        } else {
+
+            for (let stat in data.polygons[id1]) {
+                polygons[id1][stat] = data.polygons[id1][stat]
+            }
+        }
+    }
+
+    for (let id1 in players) {
+        if (!data.fullPlayerList.includes(id1)) {
+            delete players[id1]
+        }
+    }
+
+    for (let id1 in polygons) {
+        if (!data.fullPolygonList.includes(id1)) {
+            console.log('ello')
+            delete polygons[id1]
+        }
+    }
+
+
+
     playerX = players[id].position.x
     playerY = players[id].position.y
     playerScore = players[id].score
     playerAngle = players[id].rotation
     playerSize = players[id].size
     projectiles = data.projectiles
-    polygons = data.polygons;
     immovables = data.immovables
     leaderboard = data.leaderboard
     ui.upgrades = players[id].skillUpgrades;
@@ -396,7 +423,10 @@ function animationLoop() {
         projectileRender(proj, ctx);
     }
 
-    for (let poly of polygons) {
+    for (let id in polygons) {
+        //console.log(id)
+        poly = polygons[id]
+
         polygonRenderer(poly, ctx)
         if (poly.hp > 0 && poly.hp / poly.maxHp != 1) {
 
