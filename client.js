@@ -3,6 +3,9 @@ const ctx = canvas.getContext('2d');
 const socket = io('https://diep3server.oggyp.com', {
     withCredentials: true
 });
+window.onload = () => {
+    const chatbox = document.getElementById("chatbox");
+}
 
 const saved = JSON.parse(sessionStorage.getItem('formData') || '{}');
 if (saved.text != '') {
@@ -30,7 +33,6 @@ let baseMaxYView = xView * (9 / 16)
 let maxXView = 110
 let baseMaxXView = 110
 
-console.log(GSRatio)
 
 let playerX = 0;
 let playerY = 0;
@@ -48,7 +50,7 @@ let projectiles = [];
 let polygons = {};
 let immovables = []; // might just group in with polygons
 let upgradeOptions = [];
-
+let currentChatMessages = {}
 
 let eWasJustPressed = false;
 let leaderboard = {};
@@ -84,26 +86,58 @@ function changeTankPrompt() {
 
 window.addEventListener('keydown', e => {
     keys[e.code] = true;
-    evaluateMovement()
-
-    if (e.code == "KeyE") {
-        eWasJustPressed = true;
-    } else if (e.code == "KeyT") {
-        changeTankPrompt()
+    if (!ui.isChatBoxOpen) {
+        evaluateMovement()
     }
 
-    if (e.code == 'Minus') {
-        baseMaxXView += 10;
-        maxXView += 10;
-    } else if (e.code == 'Equal') {
-        baseMaxXView += -10
-        maxXView += -10
+    if (!ui.isChatBoxOpen) {
+        if (e.code == "KeyE") {
+            eWasJustPressed = true;
+        } else if (e.code == "KeyT") {
+            changeTankPrompt()
+        }
+    }
+
+    // if (e.code == 'Minus') {
+    //     baseMaxXView += 10;
+    //     maxXView += 10;
+    // } else if (e.code == 'Equal') {
+    //     baseMaxXView += -10
+    //     maxXView += -10
+    // }
+
+    if (e.code == "Enter") {
+        if (ui.isChatBoxOpen) {
+            ui.isChatBoxOpen = false
+
+            chatbox.style.setProperty('visibility', 'hidden')
+            let text = chatbox.value
+            socket.emit("sendChatMessage", text)
+
+        } else {
+            socket.emit("moveStop", { "id": id })
+            ui.isChatBoxOpen = true
+
+            chatbox.style.setProperty('visibility', 'visible')
+            chatbox.focus();
+            chatbox.select();
+        }
+    }
+
+    if (e.code == "Escape") {
+        if (ui.isChatBoxOpen) {
+            ui.isChatBoxOpen = false
+            chatbox.style.setProperty('visibility', 'hidden')
+        }
     }
 });
 
 window.addEventListener('keyup', e => {
     keys[e.code] = false;
-    evaluateMovement()
+    if (!ui.isChatBoxOpen) {
+        evaluateMovement()
+    }
+
 
     if (e.code == "KeyE") {
         if (eWasJustPressed == true) {
@@ -270,7 +304,14 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
         }
     }
 
-
+    for (let message of data.chatMessages) {
+        if (!Object.keys(currentChatMessages).includes(message.id)) {
+            currentChatMessages[message.id] = []
+            currentChatMessages[message.id].push({ 'text': message.message, 'timer': ui.maxBroadcastTime })
+        } else {
+            currentChatMessages[message.id].push({ 'text': message.message, 'timer': ui.maxBroadcastTime })
+        }
+    }
 
     playerX = players[id].position.x
     playerY = players[id].position.y
@@ -398,6 +439,7 @@ let colorList = { // eventually move to JSON
     'pentagonBlue': { "fill": [141, 106, 223], "stroke": [91, 78, 120] },
     'whiteHighlight': { "fill": [230, 230, 230], "stroke": [200, 200, 200] },
     'green1': { "fill": [139, 196, 102], "stroke": [83, 120, 59] },
+    'green2': { "fill": [232, 124, 23], "stroke": [83, 120, 59] },
     'hexagonBlue': { "fill": [101, 201, 186], "stroke": [74, 135, 126] },
     'wallGrey': { "fill": [110, 110, 110], "stroke": [84, 84, 84] },
     'borderColor': { "fill": [105, 105, 105], "stroke": [105, 105, 105] },
@@ -416,6 +458,7 @@ function animationLoop() {
 
     canvas.width = document.documentElement.clientWidth;
     canvas.height = document.documentElement.clientHeight;
+
     ratio = canvas.width / canvas.height
     maxYView = baseMaxYView// / 2 + baseMaxYView * (playerSize / game.starting_size) * viewDecay
     maxXView = baseMaxXView// / 2 + baseMaxXView * (playerSize / game.starting_size) * viewDecay
@@ -549,8 +592,8 @@ function animationLoop() {
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
 
-            ctx.strokeText(`${curPlayer.username}`, screenX(curPlayer.position.x), screenY(curPlayer.position.y + 8));
-            ctx.fillText(`${curPlayer.username}`, screenX(curPlayer.position.x), screenY(curPlayer.position.y + 8));
+            ctx.strokeText(`${curPlayer.username}`, screenX(curPlayer.position.x), screenY(curPlayer.position.y + 6));
+            ctx.fillText(`${curPlayer.username}`, screenX(curPlayer.position.x), screenY(curPlayer.position.y + 6));
             ctx.globalAlpha = 1;
         }
 
@@ -573,6 +616,8 @@ function animationLoop() {
         if (players[id].allowedUpgrade == true) {
             ui.renderTankUpgrades(ctx, canvas, mouse);
         }
+
+        ui.renderChat(ctx, canvas);
     }
     requestAnimationFrame(animationLoop);
 

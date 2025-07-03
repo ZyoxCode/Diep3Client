@@ -10,6 +10,7 @@ class UI {
         this.maxUpgradeLvl = 9;
         this.upgrades = {};
         this.tankUpgradeOptions = [];
+        this.isChatBoxOpen = false;
     }
     presetToColorString(preset) {
         return `rgb(${preset[0]} ${preset[1]} ${preset[2]})`
@@ -156,6 +157,67 @@ class UI {
         }
     }
 
+    renderChat(ctx, canvas) {
+        let defaultOpacity = 0.7;
+        let spaceBetween = 35;
+        let threshold = 4.5 / 5
+        let endThreshold = 1 / 5
+
+        for (let id in currentChatMessages) {
+            let cumulativeYShift = 0;
+            let centerBase = [players[id].position.x, players[id].position.y + players[id].size * 1.5 + 3]
+            let playerBroadcasts = currentChatMessages[id]
+            playerBroadcasts.sort((b, a) => a['timer'] - b['timer']);
+            for (let i in playerBroadcasts) {
+
+                let broadcast = playerBroadcasts[i]
+
+                if (broadcast.timer > threshold * this.maxBroadcastTime) {
+                    console.log("ello")
+                    cumulativeYShift += spaceBetween * (1 - (broadcast.timer / (this.maxBroadcastTime * threshold)))
+                }
+
+                if (broadcast.timer < endThreshold * this.maxBroadcastTime) {
+                    broadcast.opacity = (broadcast.timer / (this.maxBroadcastTime * endThreshold));
+                }
+
+                console.log(cumulativeYShift)
+                this.makeCurvedBox(ctx, screenX(centerBase[0]), screenY(centerBase[1]) - cumulativeYShift - spaceBetween * i, 200, 25, defaultOpacity * broadcast.opacity, 'gray', 0);
+                this.makeText(ctx, broadcast.text, screenX(centerBase[0]), screenY(centerBase[1]) - cumulativeYShift - spaceBetween * i + 1, 16, 'white', 0, broadcast.opacity)
+
+
+            }
+            for (let i in playerBroadcasts) {
+                if (playerBroadcasts[playerBroadcasts.length - 1 - i].timer <= 0) {
+                    playerBroadcasts.splice(playerBroadcasts.length - 1 - i, 1);
+                } else {
+                    playerBroadcasts[playerBroadcasts.length - 1 - i].timer += -1;
+                }
+            }
+        }
+
+
+        // for (let i in this.broadcasts) {
+        //     let broadcast = this.broadcasts[i];
+
+        //     if (broadcast.timer < this.maxBroadcastTime / threshold) {
+        //         cumulativeYShift += spaceBetween * (1 - (broadcast.timer / (this.maxBroadcastTime / threshold)))
+        //         broadcast.opacity = (broadcast.timer / (this.maxBroadcastTime / threshold));
+        //     }
+
+        //     this.makeCurvedBox(ctx, canvas.width / 2, 20 - cumulativeYShift + spaceBetween * i, 400, 25, defaultOpacity * broadcast.opacity, 'gray', 0);
+        //     this.makeText(ctx, broadcast.text, canvas.width / 2, 21 - cumulativeYShift + spaceBetween * i, 15, 'white', 0, broadcast.opacity)
+        // }
+
+        // for (let i in this.broadcasts) {
+        //     if (this.broadcasts[this.broadcasts.length - 1 - i].timer <= 0) {
+        //         this.broadcasts.splice(this.broadcasts.length - 1 - i, 1);
+        //     } else {
+        //         this.broadcasts[this.broadcasts.length - 1 - i].timer += -1;
+        //     }
+        // }
+    }
+
     renderSkillUpgrades(ctx, canvas, mouse, allocatable) {
 
         let spaceBetween = this.upgradesPanel.spaceBetween;
@@ -284,7 +346,7 @@ class UI {
             ctx.fill();
             ctx.globalAlpha = 1;
 
-            this.makeText(ctx, this.tankUpgradeOptions[i].name, spaceFromLeft + ((i % maxCols) * (size + spaceBetween)) + size / 2, spaceFromTop + (size + spaceBetween) * (Math.floor(i / maxCols)) + size - 10, 12, 'white', 2)
+
 
             let entry = this.tankUpgradeOptions[i]
 
@@ -294,9 +356,12 @@ class UI {
             entry.mockup.color = "playerBlue"
             tankRenderer(entry.mockup, ctx)
 
+            this.makeText(ctx, this.tankUpgradeOptions[i].name, spaceFromLeft + ((i % maxCols) * (size + spaceBetween)) + size / 2, spaceFromTop + (size + spaceBetween) * (Math.floor(i / maxCols)) + size - 10, 12, 'white', 2)
+
 
         }
     }
+
 
     checkTankUpgradeRequest(mouse) {
         let size = 100;
