@@ -75,8 +75,7 @@ class UI {
         let offsetFromTop = 50;
         let offsetFromRight = 20;
 
-        //console.log(Object.keys(leaderboard).length)
-
+        leaderboard = Object.fromEntries(Object.entries(leaderboard).sort(([, a], [, b]) => a['rank'] - b['rank']))
         if (Object.keys(leaderboard).length > 0) {
             maxScore = leaderboard[Object.keys(leaderboard)[0]].score
         }
@@ -86,8 +85,6 @@ class UI {
         for (let i in leaderboard) {
 
             let entry = leaderboard[i]
-            //console.log(entry)
-
 
             this.makeCurvedBox(ctx, canvas.width - width / 2 - offsetFromRight, offsetFromTop + j * spaceBetween, width, height, 1, 'borderColor', 5);
 
@@ -143,8 +140,10 @@ class UI {
                 cumulativeYShift += spaceBetween * (1 - (broadcast.timer / (this.maxBroadcastTime / threshold)))
                 broadcast.opacity = (broadcast.timer / (this.maxBroadcastTime / threshold));
             }
-
-            this.makeCurvedBox(ctx, canvas.width / 2, 20 - cumulativeYShift + spaceBetween * i, 400, 25, defaultOpacity * broadcast.opacity, 'gray', 0);
+            ctx.fontStyle = 'bold Ubuntu 15px'
+            const text = broadcast.text;
+            const textMetrics = ctx.measureText(text)
+            this.makeCurvedBox(ctx, canvas.width / 2, 20 - cumulativeYShift + spaceBetween * i, textMetrics.width * 1.2 + 20, 25, defaultOpacity * broadcast.opacity, 'gray', 0);
             this.makeText(ctx, broadcast.text, canvas.width / 2, 21 - cumulativeYShift + spaceBetween * i, 15, 'white', 0, broadcast.opacity)
         }
 
@@ -173,7 +172,6 @@ class UI {
                 let broadcast = playerBroadcasts[i]
 
                 if (broadcast.timer > threshold * this.maxBroadcastTime) {
-                    console.log("ello")
                     cumulativeYShift += spaceBetween * (1 - (broadcast.timer / (this.maxBroadcastTime * threshold)))
                 }
 
@@ -181,8 +179,10 @@ class UI {
                     broadcast.opacity = (broadcast.timer / (this.maxBroadcastTime * endThreshold));
                 }
 
-
-                this.makeCurvedBox(ctx, screenX(centerBase[0]), screenY(centerBase[1]) - cumulativeYShift - spaceBetween * i, 200, 25, defaultOpacity * broadcast.opacity, 'gray', 0);
+                ctx.fontStyle = 'bold Ubuntu 16px'
+                const text = broadcast.text;
+                const textMetrics = ctx.measureText(text)
+                this.makeCurvedBox(ctx, screenX(centerBase[0]), screenY(centerBase[1]) - cumulativeYShift - spaceBetween * i, textMetrics.width * 1.4 + 20, 25, defaultOpacity * broadcast.opacity, 'gray', 0);
                 this.makeText(ctx, broadcast.text, screenX(centerBase[0]), screenY(centerBase[1]) - cumulativeYShift - spaceBetween * i + 1, 16, 'white', 0, broadcast.opacity)
 
 
@@ -195,27 +195,6 @@ class UI {
                 }
             }
         }
-
-
-        // for (let i in this.broadcasts) {
-        //     let broadcast = this.broadcasts[i];
-
-        //     if (broadcast.timer < this.maxBroadcastTime / threshold) {
-        //         cumulativeYShift += spaceBetween * (1 - (broadcast.timer / (this.maxBroadcastTime / threshold)))
-        //         broadcast.opacity = (broadcast.timer / (this.maxBroadcastTime / threshold));
-        //     }
-
-        //     this.makeCurvedBox(ctx, canvas.width / 2, 20 - cumulativeYShift + spaceBetween * i, 400, 25, defaultOpacity * broadcast.opacity, 'gray', 0);
-        //     this.makeText(ctx, broadcast.text, canvas.width / 2, 21 - cumulativeYShift + spaceBetween * i, 15, 'white', 0, broadcast.opacity)
-        // }
-
-        // for (let i in this.broadcasts) {
-        //     if (this.broadcasts[this.broadcasts.length - 1 - i].timer <= 0) {
-        //         this.broadcasts.splice(this.broadcasts.length - 1 - i, 1);
-        //     } else {
-        //         this.broadcasts[this.broadcasts.length - 1 - i].timer += -1;
-        //     }
-        // }
     }
 
     renderSkillUpgrades(ctx, canvas, mouse, allocatable) {

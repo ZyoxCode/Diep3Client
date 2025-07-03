@@ -113,6 +113,7 @@ window.addEventListener('keydown', e => {
             chatbox.style.setProperty('visibility', 'hidden')
             let text = chatbox.value
             socket.emit("sendChatMessage", text)
+            chatbox.value = ""
 
         } else {
             socket.emit("moveStop", { "id": id })
