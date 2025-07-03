@@ -181,7 +181,7 @@ class UI {
                     broadcast.opacity = (broadcast.timer / (this.maxBroadcastTime * endThreshold));
                 }
 
-                console.log(cumulativeYShift)
+
                 this.makeCurvedBox(ctx, screenX(centerBase[0]), screenY(centerBase[1]) - cumulativeYShift - spaceBetween * i, 200, 25, defaultOpacity * broadcast.opacity, 'gray', 0);
                 this.makeText(ctx, broadcast.text, screenX(centerBase[0]), screenY(centerBase[1]) - cumulativeYShift - spaceBetween * i + 1, 16, 'white', 0, broadcast.opacity)
 
