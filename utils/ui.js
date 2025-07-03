@@ -74,37 +74,43 @@ class UI {
         let offsetFromTop = 50;
         let offsetFromRight = 20;
 
+        console.log(Object.keys(leaderboard).length)
 
-        if (leaderboard.entries.length > 0) {
-            maxScore = leaderboard.entries[0].score
+        if (Object.keys(leaderboard).length > 0) {
+            maxScore = leaderboard[Object.keys(leaderboard)[0]].score
         }
 
         this.makeText(ctx, 'Leaderboard', canvas.width - width / 2 - offsetFromRight, offsetFromTop - 25, 20)
-        for (let i in leaderboard.entries) {
+        let j = 0
+        for (let i in leaderboard) {
 
-            let entry = leaderboard.entries[i]
+            let entry = leaderboard[i]
+            console.log(entry)
 
 
-            this.makeCurvedBox(ctx, canvas.width - width / 2 - offsetFromRight, offsetFromTop + i * spaceBetween, width, height, 1, 'borderColor', 5);
+            this.makeCurvedBox(ctx, canvas.width - width / 2 - offsetFromRight, offsetFromTop + j * spaceBetween, width, height, 1, 'borderColor', 5);
+
             let color = 'playerRed'
-            if (entry.id == playerId) {
+            if (i == playerId) {
                 color = 'playerBlue'
             }
-            this.makeCurvedBox(ctx, canvas.width - width - offsetFromRight, offsetFromTop + i * spaceBetween, (width - 10) * (entry.score / maxScore) + 10, height, 1, color, 0, true);
+            console.log(maxScore)
+            this.makeCurvedBox(ctx, canvas.width - width - offsetFromRight, offsetFromTop + j * spaceBetween, (width - 10) * (entry.score / maxScore) + 10, height, 1, color, 0, true);
 
             let displayText = entry.score
             if (parseInt(entry.score) >= 1000) {
                 displayText = `${parseInt(entry.score) / 1000}k`
             }
 
-            this.makeText(ctx, `${entry.name} - ${entry.tank}: ${displayText}`, canvas.width - width / 2 - offsetFromRight, offsetFromTop + 1 + i * spaceBetween, fontSize, 'white', fontSize / 5, 1)
+            this.makeText(ctx, `${entry.name} - ${entry.tank}: ${displayText}`, canvas.width - width / 2 - offsetFromRight, offsetFromTop + 1 + j * spaceBetween, fontSize, 'white', fontSize / 5, 1)
 
 
             entry.mockup.position.x = gameX(canvas.width - width - offsetFromRight - 20)
-            entry.mockup.position.y = gameY(offsetFromTop + i * spaceBetween)
+            entry.mockup.position.y = gameY(offsetFromTop + j * spaceBetween)
             entry.mockup.color = color
 
             tankRenderer(entry.mockup, ctx);
+            j++;
 
 
         }

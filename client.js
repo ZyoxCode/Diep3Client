@@ -1,8 +1,6 @@
 const canvas = document.getElementById('main');
 const ctx = canvas.getContext('2d');
-const socket = io('https://diep3server.oggyp.com', {
-    withCredentials: true
-});
+const socket = io('http://localhost:3000');
 
 const saved = JSON.parse(sessionStorage.getItem('formData') || '{}');
 if (saved.text != '') {
@@ -45,13 +43,13 @@ const keys = {};
 
 let players = {};
 let projectiles = [];
-let polygons = [];
+let polygons = {};
 let immovables = []; // might just group in with polygons
 let upgradeOptions = [];
 
 
 let eWasJustPressed = false;
-let leaderboard = { "entries": [] };
+let leaderboard = {};
 let FLASH_LAMBDA = 2;
 
 // Sample upgrade format
@@ -204,14 +202,15 @@ socket.on('init', (data) => {
     console.log('Initial Player Position: (', playerX, ',', playerY, ')')
 
     game.gridLines = makeGrid(game.mapSize)
+    console.log(players)
     console.log(game)
+
     drawGrid(game.gridLines)
 
 });
 
 socket.on('gameState', (data) => { // I think in here we just put updating variables and then have a seperate loop for rendering
-
-
+    //console.log(data.fullPolygonList.length)
     for (let id1 in data.players) {
 
         if (!(id1 in players)) {
@@ -235,6 +234,27 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
         }
     }
 
+    for (let id1 in data.leaderboard) {
+
+        if (!(id1 in leaderboard)) {
+            leaderboard[id1] = data.leaderboard[id1]
+        } else {
+
+            for (let stat in data.leaderboard[id1].entries) {
+                leaderboard[id1].entries[stat] = data.leaderboard[id1].entries[stat]
+            }
+        }
+    }
+
+    for (let id1 in leaderboard) {
+        if (!Object.keys(data.leaderboard).includes(id1)) {
+
+            delete leaderboard[id1]
+        }
+    }
+
+
+
     for (let id1 in players) {
         if (!data.fullPlayerList.includes(id1)) {
             delete players[id1]
@@ -243,7 +263,6 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
 
     for (let id1 in polygons) {
         if (!data.fullPolygonList.includes(id1)) {
-            console.log('ello')
             delete polygons[id1]
         }
     }
@@ -257,7 +276,7 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
     playerSize = players[id].size
     projectiles = data.projectiles
     immovables = data.immovables
-    leaderboard = data.leaderboard
+    // leaderboard = data.leaderboard
     ui.upgrades = players[id].skillUpgrades;
 
 
