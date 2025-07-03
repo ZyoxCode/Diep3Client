@@ -1,6 +1,8 @@
 const canvas = document.getElementById('main');
 const ctx = canvas.getContext('2d');
-const socket = io('http://localhost:3000');
+const socket = io('https://diep3server.oggyp.com', {
+    withCredentials: true
+});
 
 const saved = JSON.parse(sessionStorage.getItem('formData') || '{}');
 if (saved.text != '') {
@@ -248,12 +250,9 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
 
     for (let id1 in leaderboard) {
         if (!Object.keys(data.leaderboard).includes(id1)) {
-
             delete leaderboard[id1]
         }
     }
-
-
 
     for (let id1 in players) {
         if (!data.fullPlayerList.includes(id1)) {
@@ -575,3 +574,4 @@ function animationLoop() {
 
 }
 animationLoop();
+

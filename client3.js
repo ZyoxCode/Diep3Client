@@ -1,8 +1,6 @@
 const canvas = document.getElementById('main');
 const ctx = canvas.getContext('2d');
-const socket = io('https://diep3server.oggyp.com', {
-    withCredentials: true
-});
+const socket = io('http://localhost:3000');
 
 const saved = JSON.parse(sessionStorage.getItem('formData') || '{}');
 if (saved.text != '') {
@@ -577,4 +575,3 @@ function animationLoop() {
 
 }
 animationLoop();
-
