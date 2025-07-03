@@ -74,7 +74,7 @@ class UI {
         let offsetFromTop = 50;
         let offsetFromRight = 20;
 
-        console.log(Object.keys(leaderboard).length)
+        //console.log(Object.keys(leaderboard).length)
 
         if (Object.keys(leaderboard).length > 0) {
             maxScore = leaderboard[Object.keys(leaderboard)[0]].score
@@ -85,7 +85,7 @@ class UI {
         for (let i in leaderboard) {
 
             let entry = leaderboard[i]
-            console.log(entry)
+            //console.log(entry)
 
 
             this.makeCurvedBox(ctx, canvas.width - width / 2 - offsetFromRight, offsetFromTop + j * spaceBetween, width, height, 1, 'borderColor', 5);
@@ -94,7 +94,7 @@ class UI {
             if (i == playerId) {
                 color = 'playerBlue'
             }
-            console.log(maxScore)
+            //console.log(maxScore)
             this.makeCurvedBox(ctx, canvas.width - width - offsetFromRight, offsetFromTop + j * spaceBetween, (width - 10) * (entry.score / maxScore) + 10, height, 1, color, 0, true);
 
             let displayText = entry.score

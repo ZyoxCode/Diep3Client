@@ -210,7 +210,7 @@ socket.on('init', (data) => {
 });
 
 socket.on('gameState', (data) => { // I think in here we just put updating variables and then have a seperate loop for rendering
-    //console.log(data.fullPolygonList.length)
+    //console.log(data.leaderboard)
     for (let id1 in data.players) {
 
         if (!(id1 in players)) {
@@ -236,12 +236,13 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
 
     for (let id1 in data.leaderboard) {
 
-        if (!(id1 in leaderboard)) {
+        if (!(Object.keys(leaderboard).includes(id1))) {
             leaderboard[id1] = data.leaderboard[id1]
         } else {
-
-            for (let stat in data.leaderboard[id1].entries) {
-                leaderboard[id1].entries[stat] = data.leaderboard[id1].entries[stat]
+            console.log(data.leaderboard[id1])
+            for (let stat in data.leaderboard[id1]) {
+                console.log(stat)
+                leaderboard[id1][stat] = data.leaderboard[id1][stat]
             }
         }
     }
