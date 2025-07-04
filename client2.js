@@ -7,8 +7,7 @@ window.onload = () => {
 
 
 const saved = JSON.parse(sessionStorage.getItem('formData') || '{}');
-if (saved.text != '') {
-
+if (saved.text != '' && 'text' in saved) {
     socket.emit('setUsername', { 'username': saved.text })
 }
 
@@ -45,7 +44,7 @@ let starting_size = 0
 const keys = {};
 
 let players = {};
-let projectiles = [];
+let projectiles = {};
 let polygons = {};
 let immovables = []; // might just group in with polygons
 let upgradeOptions = [];
@@ -69,7 +68,6 @@ class Game {
         this.gridInterval = gridInterval
         this.starting_score = starting_score
         this.starting_size = starting_size
-
     }
 }
 
@@ -111,7 +109,9 @@ window.addEventListener('keydown', e => {
 
             chatbox.style.setProperty('visibility', 'hidden')
             let text = chatbox.value
-            socket.emit("sendChatMessage", text)
+            if (text != '') {
+                socket.emit("sendChatMessage", text)
+            }
             chatbox.value = ""
 
         } else {
@@ -222,7 +222,7 @@ function evaluateMovement() {
 
 
 socket.on('init', (data) => {
-    console.log('Received initial game state:', data);
+    //console.log('Received initial game state:', data);
     id = data.id
 
     game.mapSize = data.map_size
@@ -234,19 +234,19 @@ socket.on('init', (data) => {
     playerX = data.x
     playerY = data.y
 
-    console.log('Map Size:', game.mapSize)
-    console.log('Initial Player Position: (', playerX, ',', playerY, ')')
+    immovables = data.immovables
 
-    game.gridLines = makeGrid(game.mapSize)
-    console.log(players)
-    console.log(game)
+    // console.log('Map Size:', game.mapSize)
+    // console.log('Initial Player Position: (', playerX, ',', playerY, ')')
 
-    drawGrid(game.gridLines)
+    game.gridLines = makeGrid()
 
 });
 
 socket.on('gameState', (data) => { // I think in here we just put updating variables and then have a seperate loop for rendering
     //console.log(data.leaderboard)
+    //console.log(data.players)
+    //console.log(data.projectiles)
     for (let id1 in data.players) {
 
         if (!(id1 in players)) {
@@ -266,6 +266,19 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
 
             for (let stat in data.polygons[id1]) {
                 polygons[id1][stat] = data.polygons[id1][stat]
+            }
+        }
+    }
+
+    for (let id1 in data.projectiles) {
+
+        if (!(id1 in projectiles)) {
+            projectiles[id1] = data.projectiles[id1]
+        } else {
+
+            for (let stat in data.projectiles[id1]) {
+                // console.log(stat)
+                projectiles[id1][stat] = data.projectiles[id1][stat]
             }
         }
     }
@@ -290,16 +303,20 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
         }
     }
 
-
+    for (let id1 in projectiles) {
+        if (!Object.keys(data.projectiles).includes(id1)) {
+            delete projectiles[id1]
+        }
+    }
 
     for (let id1 in players) {
-        if (!data.fullPlayerList.includes(id1)) {
+        if (!Object.keys(data.players).includes(id1)) {
             delete players[id1]
         }
     }
 
     for (let id1 in polygons) {
-        if (!data.fullPolygonList.includes(id1)) {
+        if (!Object.keys(data.polygons).includes(id1)) {
             delete polygons[id1]
         }
     }
@@ -307,9 +324,9 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
     for (let message of data.chatMessages) {
         if (!Object.keys(currentChatMessages).includes(message.id)) {
             currentChatMessages[message.id] = []
-            currentChatMessages[message.id].push({ 'text': message.message, 'timer': ui.maxBroadcastTime })
+            currentChatMessages[message.id].push({ 'text': message.message, 'timer': ui.maxChatTime })
         } else {
-            currentChatMessages[message.id].push({ 'text': message.message, 'timer': ui.maxBroadcastTime })
+            currentChatMessages[message.id].push({ 'text': message.message, 'timer': ui.maxChatTime })
         }
     }
 
@@ -318,9 +335,7 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
     playerScore = players[id].score
     playerAngle = players[id].rotation
     playerSize = players[id].size
-    projectiles = data.projectiles
-    immovables = data.immovables
-    // leaderboard = data.leaderboard
+
     ui.upgrades = players[id].skillUpgrades;
 
 
@@ -485,8 +500,9 @@ function animationLoop() {
     drawGrid(game.gridLines)
 
     ctx.lineWidth = 1 / GSRatio;
-    for (let proj of projectiles) {
-        projectileRender(proj, ctx);
+    for (let id in projectiles) {
+
+        projectileRender(projectiles[id], ctx);
     }
 
     for (let id in polygons) {
@@ -618,6 +634,7 @@ function animationLoop() {
         }
 
         ui.renderChat(ctx, canvas);
+        ui.renderOther(ctx, canvas);
     }
     requestAnimationFrame(animationLoop);
 

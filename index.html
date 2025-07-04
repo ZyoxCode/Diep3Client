@@ -15,11 +15,34 @@
     </h1>
     <h2>I'll think of a proper name later</h2>
     <div class="mainbox">
+        <div class="mainboxCol"></div>
+        <div class="mainboxCol" style="justify-content: flex-end;">
+            <form id="myForm">
+                <input name="text" type="text" maxlength="20" id="usernameInput" placeholder="This is the tale of"
+                    required />
+                <button id="joinBtn">Join Game</button>
+            </form>
+        </div>
+        <div class="mainboxCol">
+            <h3>Changelogs</h3>
+            <span style="text-align: left; width: 12vw; max-height: 20vh; overflow: scroll;">
+                <h4 style="color:gray">Alpha 1.01 (04/07/2025)</h4>
+                <ul style="font-size: 13px;">
+                    <li>Fixed server crashing after any tank with drones disconnects</li>
+                    <li>Fixed chat and broadcast width</li>
+                    <li>Fixed leaderboard glitches</li>
+                    <li>Added borders to the map</li>
+                    <li>Added coordinate display above minimap</li>
+                    <li>Removed collision on friendly bullet class projectiles</li>
+                    <li>Improved server efficiency for projectiles</li>
+                    <li>Updated title screen</li>
+                    <li>Increased Hexagon hp</li>
+                </ul>
+            </span>
 
-        <form id="myForm">
-            <input name="text" type="text" required />
-            <button id="joinBtn">Join Game</button>
-        </form>
+
+        </div>
+
     </div>
 
 </body>
@@ -27,11 +50,11 @@
 
 <script>
     document.getElementById('joinBtn').addEventListener('click', e => {
-        e.preventDefault();                     // stop normal nav
+        e.preventDefault();
         const form = document.getElementById('myForm');
         const data = Object.fromEntries(new FormData(form));
         sessionStorage.setItem('formData', JSON.stringify(data));
-        window.location = 'game.html';        // Manual navigation
+        window.location = 'game.html';
     });
 </script>
 

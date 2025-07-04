@@ -1,10 +1,14 @@
 const REFERENCE_SIZE = 5;
-
+function roundToDecimalPlaces(number, decimalPlaces) {
+    const multiplier = Math.pow(10, decimalPlaces);
+    return Math.round(number * multiplier) / multiplier;
+}
 class UI {
     constructor(colorPresets) {
         this.colorPresets = colorPresets;
         this.broadcasts = [];
         this.maxBroadcastTime = 500;
+        this.maxChatTime = 1000;
 
         this.upgradesPanel = { 'width': 300, 'height': 20, 'spaceBetween': 30, 'spaceFromLeft': 20, 'spaceFromBottom': 50 }
         this.maxUpgradeLvl = 9;
@@ -140,10 +144,10 @@ class UI {
                 cumulativeYShift += spaceBetween * (1 - (broadcast.timer / (this.maxBroadcastTime / threshold)))
                 broadcast.opacity = (broadcast.timer / (this.maxBroadcastTime / threshold));
             }
-            ctx.fontStyle = 'bold Ubuntu 15px'
+            ctx.font = 'bold 15px Ubuntu'
             const text = broadcast.text;
             const textMetrics = ctx.measureText(text)
-            this.makeCurvedBox(ctx, canvas.width / 2, 20 - cumulativeYShift + spaceBetween * i, textMetrics.width * 1.2 + 20, 25, defaultOpacity * broadcast.opacity, 'gray', 0);
+            this.makeCurvedBox(ctx, canvas.width / 2, 20 - cumulativeYShift + spaceBetween * i, textMetrics.width + 50, 25, defaultOpacity * broadcast.opacity, 'gray', 0);
             this.makeText(ctx, broadcast.text, canvas.width / 2, 21 - cumulativeYShift + spaceBetween * i, 15, 'white', 0, broadcast.opacity)
         }
 
@@ -164,25 +168,25 @@ class UI {
 
         for (let id in currentChatMessages) {
             let cumulativeYShift = 0;
-            let centerBase = [players[id].position.x, players[id].position.y + players[id].size * 1.5 + 3]
+            let centerBase = [players[id].position.x, players[id].position.y + players[id].size + 5]
             let playerBroadcasts = currentChatMessages[id]
             playerBroadcasts.sort((b, a) => a['timer'] - b['timer']);
             for (let i in playerBroadcasts) {
 
                 let broadcast = playerBroadcasts[i]
 
-                if (broadcast.timer > threshold * this.maxBroadcastTime) {
-                    cumulativeYShift += spaceBetween * (1 - (broadcast.timer / (this.maxBroadcastTime * threshold)))
+                if (broadcast.timer > threshold * this.maxChatTime) {
+                    cumulativeYShift += spaceBetween * (1 - (broadcast.timer / (this.maxChatTime * threshold)))
                 }
 
-                if (broadcast.timer < endThreshold * this.maxBroadcastTime) {
-                    broadcast.opacity = (broadcast.timer / (this.maxBroadcastTime * endThreshold));
+                if (broadcast.timer < endThreshold * this.maxChatTime) {
+                    broadcast.opacity = (broadcast.timer / (this.maxChatTime * endThreshold));
                 }
 
-                ctx.fontStyle = 'bold Ubuntu 16px'
+                ctx.font = 'bold 16px Ubuntu'
                 const text = broadcast.text;
                 const textMetrics = ctx.measureText(text)
-                this.makeCurvedBox(ctx, screenX(centerBase[0]), screenY(centerBase[1]) - cumulativeYShift - spaceBetween * i, textMetrics.width * 1.4 + 20, 25, defaultOpacity * broadcast.opacity, 'gray', 0);
+                this.makeCurvedBox(ctx, screenX(centerBase[0]), screenY(centerBase[1]) - cumulativeYShift - spaceBetween * i, textMetrics.width + 30, 25, defaultOpacity * broadcast.opacity, 'gray', 0);
                 this.makeText(ctx, broadcast.text, screenX(centerBase[0]), screenY(centerBase[1]) - cumulativeYShift - spaceBetween * i + 1, 16, 'white', 0, broadcast.opacity)
 
 
@@ -296,6 +300,9 @@ class UI {
         ctx.arc(canvas.width - spaceFromRight - (size) * (playerPos.x / mapSize) - size / 2, canvas.height - spaceFromBottom - (size) * (playerPos.y / mapSize) - size / 2, 3, 0, 2 * Math.PI);
         ctx.closePath();
         ctx.fill();
+    }
+    renderOther(ctx, canvas) {
+        this.makeText(ctx, `${roundToDecimalPlaces(players[id].position.x, 1)}, ${roundToDecimalPlaces(players[id].position.y, 1)}`, canvas.width - 100 - 10, canvas.height - 20 - 200, 11)
     }
 
     renderTankUpgrades(ctx, canvas, mouse) {

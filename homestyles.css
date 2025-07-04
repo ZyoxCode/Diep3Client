@@ -37,15 +37,59 @@ h2 {
     color: black;
     background-color: white;
     display: flex;
-    align-items: center;
+
     gap: 10px;
+    flex-direction: row;
+}
+
+.mainboxCol {
+    display: flex;
+    align-items: center;
     flex-direction: column;
+    width: 15vw;
 }
 
 #joinBtn {
     text-decoration: none;
     color: white;
-    background-color: rgb(139, 59, 59);
+    background-color: rgb(221, 102, 102);
     padding: 0.3vw 1vw;
-    border-radius: 0.5vw;
+    border-radius: 0.2vw;
+    box-shadow: 1px 2px rgb(145, 63, 63);
+    border: none;
+    width: 13vw;
+    margin-top: 0.5vh;
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 800;
+    text-shadow: 1px 2px rgb(145, 63, 63);
+}
+
+#joinBtn:hover {
+    cursor: pointer;
+}
+
+#usernameInput {
+    padding: 0.3vw;
+    width: 13vw;
+    text-align: center;
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 500;
+}
+
+form {
+    width: 13vw;
+}
+
+h4 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+ul {
+    list-style-position: inside;
+}
+
+li {
+    padding: 2px;
+    list-style-type: disc;
 }
