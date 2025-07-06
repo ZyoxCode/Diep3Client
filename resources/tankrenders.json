@@ -740,6 +740,46 @@
             ]
         }
     ],
+    "Constructor": [
+        {
+            "path": [
+                0
+            ],
+            "baseShapes": [
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": -2.5
+                    },
+                    "size": {
+                        "x": 9,
+                        "y": 6.5
+                    }
+                },
+                {
+                    "type": "rect",
+                    "centering": "base",
+                    "offset": {
+                        "x": 0,
+                        "y": 4
+                    },
+                    "size": {
+                        "x": 9,
+                        "y": 1.2
+                    },
+                    "aspect": 1.2
+                }
+            ],
+            "animationBindings": [
+                {
+                    "index": 0,
+                    "binding": "yscale"
+                }
+            ]
+        }
+    ],
     "Pen": [
         {
             "path": [

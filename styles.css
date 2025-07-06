@@ -35,3 +35,21 @@ body {
     border-radius: 1vh;
     font-family: 'Ubuntu';
 }
+
+#disconnectBox {
+    visibility: hidden;
+    position: fixed;
+    background: #ff0000;
+    background: linear-gradient(90deg, rgba(255, 0, 0, 0.54) 0%, rgba(255, 5, 5, 0.54) 100%);
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+}
+
+#disconnectBox h1 {
+    font-family: 'Ubuntu';
+    -webkit-text-stroke: 3px black;
+    color: white;
+    margin-top: 30vh;
+    paint-order: stroke fill;
+}

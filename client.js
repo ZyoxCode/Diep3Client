@@ -1,10 +1,9 @@
 const canvas = document.getElementById('main');
 const ctx = canvas.getContext('2d');
-const socket = io('https://diep3server.oggyp.com', {
-    withCredentials: true
-});
+const socket = io('http://localhost:3000');
 window.onload = () => {
     const chatbox = document.getElementById("chatbox");
+    const disconnectBox = document.getElementById("disconnectBox");
 }
 
 
@@ -50,7 +49,7 @@ let projectiles = {};
 let polygons = {};
 let immovables = []; // might just group in with polygons
 let upgradeOptions = [];
-let currentChatMessages = {}
+let currentChatMessages = {};
 
 let eWasJustPressed = false;
 let leaderboard = {};
@@ -96,14 +95,6 @@ window.addEventListener('keydown', e => {
             changeTankPrompt()
         }
     }
-
-    // if (e.code == 'Minus') {
-    //     baseMaxXView += 10;
-    //     maxXView += 10;
-    // } else if (e.code == 'Equal') {
-    //     baseMaxXView += -10
-    //     maxXView += -10
-    // }
 
     if (e.code == "Enter") {
         if (ui.isChatBoxOpen) {
@@ -225,6 +216,7 @@ function evaluateMovement() {
 
 socket.on('init', (data) => {
     //console.log('Received initial game state:', data);
+    disconnectBox.style.setProperty('visibility', 'hidden')
     id = data.id
 
     game.mapSize = data.map_size
@@ -313,6 +305,10 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
 
     for (let id1 in players) {
         if (!Object.keys(data.players).includes(id1)) {
+            if (id1 in currentChatMessages) {
+                console.log('ello')
+                delete currentChatMessages[id1]
+            }
             delete players[id1]
         }
     }
@@ -339,8 +335,10 @@ socket.on('gameState', (data) => { // I think in here we just put updating varia
     playerSize = players[id].size
 
     ui.upgrades = players[id].skillUpgrades;
+});
 
-
+socket.on('disconnect', (data) => {
+    disconnectBox.style.setProperty('visibility', 'visible')
 });
 
 socket.on('addBroadcast', (data) => {

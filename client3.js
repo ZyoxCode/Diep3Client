@@ -1,6 +1,8 @@
 const canvas = document.getElementById('main');
 const ctx = canvas.getContext('2d');
-const socket = io('http://localhost:3000');
+const socket = io('https://diep3server.oggyp.com', {
+    withCredentials: true
+});
 window.onload = () => {
     const chatbox = document.getElementById("chatbox");
 }

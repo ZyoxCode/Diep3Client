@@ -118,7 +118,8 @@ class UI {
         }
     }
     renderScoreBar(ctx, canvas, player) {
-        this.makeCurvedBox(ctx, canvas.width / 2, canvas.height - 50, 500, 28, 1, 'squareYellow', 5);
+        this.makeCurvedBox(ctx, canvas.width / 2 - (canvas.width / 3.5) / 2 - 2, canvas.height - 50, (canvas.width / 3.5) + 4, 32, 0.7, 'borderColor', 0, true);
+        this.makeCurvedBox(ctx, canvas.width / 2 - (canvas.width / 3.5) / 2, canvas.height - 50, 25 + (canvas.width / 3.5 - 25) * ((player.score - player.lastLevelScore) / (player.nextLevelScore - player.lastLevelScore)), 28, 1, 'squareYellow', 0, true);
         this.makeText(ctx, `Level ${player.level} ${player.tankoidPreset}`, canvas.width / 2, canvas.height - 49, 20, 'white', 5, 1)
     }
 
@@ -167,45 +168,48 @@ class UI {
         let endThreshold = 1 / 5
 
         for (let id in currentChatMessages) {
-            let cumulativeYShift = 0;
-            let centerBase = [players[id].position.x, players[id].position.y + players[id].size + 5]
-            let playerBroadcasts = currentChatMessages[id]
-            playerBroadcasts.sort((b, a) => a['timer'] - b['timer']);
-            for (let i in playerBroadcasts) {
+            if (id in players) {
+                let cumulativeYShift = 0;
+                let centerBase = [players[id].position.x, players[id].position.y + players[id].size + 5]
+                let playerBroadcasts = currentChatMessages[id]
+                playerBroadcasts.sort((b, a) => a['timer'] - b['timer']);
+                for (let i in playerBroadcasts) {
 
-                let broadcast = playerBroadcasts[i]
+                    let broadcast = playerBroadcasts[i]
 
-                if (broadcast.timer > threshold * this.maxChatTime) {
-                    cumulativeYShift += spaceBetween * (1 - (broadcast.timer / (this.maxChatTime * threshold)))
+                    if (broadcast.timer > threshold * this.maxChatTime) {
+                        cumulativeYShift += spaceBetween * (1 - (broadcast.timer / (this.maxChatTime * threshold)))
+                    }
+
+                    if (broadcast.timer < endThreshold * this.maxChatTime) {
+                        broadcast.opacity = (broadcast.timer / (this.maxChatTime * endThreshold));
+                    }
+
+                    ctx.font = 'bold 16px Ubuntu'
+                    const text = broadcast.text;
+                    const textMetrics = ctx.measureText(text)
+                    this.makeCurvedBox(ctx, screenX(centerBase[0]), screenY(centerBase[1]) - cumulativeYShift - spaceBetween * i, textMetrics.width + 30, 25, defaultOpacity * broadcast.opacity, 'gray', 0);
+                    this.makeText(ctx, broadcast.text, screenX(centerBase[0]), screenY(centerBase[1]) - cumulativeYShift - spaceBetween * i + 1, 16, 'white', 0, broadcast.opacity)
+
+
                 }
-
-                if (broadcast.timer < endThreshold * this.maxChatTime) {
-                    broadcast.opacity = (broadcast.timer / (this.maxChatTime * endThreshold));
+                for (let i in playerBroadcasts) {
+                    if (playerBroadcasts[playerBroadcasts.length - 1 - i].timer <= 0) {
+                        playerBroadcasts.splice(playerBroadcasts.length - 1 - i, 1);
+                    } else {
+                        playerBroadcasts[playerBroadcasts.length - 1 - i].timer += -1;
+                    }
                 }
-
-                ctx.font = 'bold 16px Ubuntu'
-                const text = broadcast.text;
-                const textMetrics = ctx.measureText(text)
-                this.makeCurvedBox(ctx, screenX(centerBase[0]), screenY(centerBase[1]) - cumulativeYShift - spaceBetween * i, textMetrics.width + 30, 25, defaultOpacity * broadcast.opacity, 'gray', 0);
-                this.makeText(ctx, broadcast.text, screenX(centerBase[0]), screenY(centerBase[1]) - cumulativeYShift - spaceBetween * i + 1, 16, 'white', 0, broadcast.opacity)
-
-
             }
-            for (let i in playerBroadcasts) {
-                if (playerBroadcasts[playerBroadcasts.length - 1 - i].timer <= 0) {
-                    playerBroadcasts.splice(playerBroadcasts.length - 1 - i, 1);
-                } else {
-                    playerBroadcasts[playerBroadcasts.length - 1 - i].timer += -1;
-                }
-            }
+
         }
     }
 
     renderSkillUpgrades(ctx, canvas, mouse, allocatable) {
 
-        let spaceBetween = this.upgradesPanel.spaceBetween;
-        let height = this.upgradesPanel.height;
-        let width = this.upgradesPanel.width; // turn this stuff into ui properties
+        let spaceBetween = canvas.width / 85;
+        let height = canvas.width / 130;
+        let width = canvas.width / 7; // turn this stuff into ui properties
         let spaceFromLeft = this.upgradesPanel.spaceFromLeft;
         let spaceFromBottom = this.upgradesPanel.spaceFromBottom;
         let max = 0;
@@ -252,18 +256,18 @@ class UI {
 
 
 
-            this.makeText(ctx, i, spaceFromLeft + width / 2, canvas.height - spaceFromBottom + 1 - max * spaceBetween, 15, 'white', 2)
+            this.makeText(ctx, i, spaceFromLeft + width / 2, canvas.height - spaceFromBottom + 1 - max * spaceBetween, canvas.width / 160, 'white', 2)
             max += 1
         }
 
 
-        this.makeText(ctx, `x${allocatable}`, spaceFromLeft + width - 20, canvas.height - spaceFromBottom + 1 - (max) * spaceBetween, 20, 'white', 4)
+        this.makeText(ctx, `x${allocatable}`, spaceFromLeft + width - canvas.width / 120, canvas.height - spaceFromBottom - (max) * spaceBetween, canvas.width / 120, 'white', 4)
     }
 
     checkUpgradeRequest(canvas, mouse) {
-        let spaceBetween = this.upgradesPanel.spaceBetween;
-        let height = this.upgradesPanel.height;
-        let width = this.upgradesPanel.width; // turn this stuff into ui properties
+        let spaceBetween = canvas.width / 85;
+        let height = canvas.width / 130;
+        let width = canvas.width / 7; // turn this stuff into ui properties
         let spaceFromLeft = this.upgradesPanel.spaceFromLeft;
         let spaceFromBottom = this.upgradesPanel.spaceFromBottom;
         let max = 0;
@@ -306,12 +310,12 @@ class UI {
     }
 
     renderTankUpgrades(ctx, canvas, mouse) {
-        let size = 100;
-        let spaceBetween = 10;
-        let spaceFromLeft = 10;
-        let spaceFromTop = 45;
+        let size = canvas.width / 20;
+        let spaceBetween = size / 10;
+        let spaceFromLeft = size / 10;
+        let spaceFromTop = (size / 10) * 4.5;
         let maxCols = 3;
-        this.makeText(ctx, `Upgrade Available!`, 110, spaceFromTop - 18, 20, 'white', 4)
+        this.makeText(ctx, `Upgrade Available!`, size * 1.1, spaceFromTop - spaceFromTop / 2, (canvas.width / 190) * 2, 'white', 4)
         for (let i in this.tankUpgradeOptions) {
             ctx.beginPath()
             ctx.rect(spaceFromLeft + ((i % maxCols) * (size + spaceBetween)), spaceFromTop + (size + spaceBetween) * (Math.floor(i / maxCols)), size, size)
@@ -338,11 +342,11 @@ class UI {
 
             entry.mockup.position.x = gameX(spaceFromLeft + ((i % maxCols) * (size + spaceBetween)) + size / 2)
             entry.mockup.position.y = gameY(spaceFromTop + (size + spaceBetween) * (Math.floor(i / maxCols)) + size / 2)
-            entry.mockup.size = 2
+            entry.mockup.size = ((canvas.width) / 120) * GSRatio
             entry.mockup.color = "playerBlue"
-            tankRenderer(entry.mockup, ctx)
 
-            this.makeText(ctx, this.tankUpgradeOptions[i].name, spaceFromLeft + ((i % maxCols) * (size + spaceBetween)) + size / 2, spaceFromTop + (size + spaceBetween) * (Math.floor(i / maxCols)) + size - 10, 12, 'white', 2)
+            tankRenderer(entry.mockup, ctx)
+            this.makeText(ctx, this.tankUpgradeOptions[i].name, spaceFromLeft + ((i % maxCols) * (size + spaceBetween)) + size / 2, spaceFromTop + (size + spaceBetween) * (Math.floor(i / maxCols)) + size - spaceBetween, canvas.width / 190, 'white', 2)
 
 
         }
@@ -350,10 +354,10 @@ class UI {
 
 
     checkTankUpgradeRequest(mouse) {
-        let size = 100;
-        let spaceBetween = 10;
-        let spaceFromLeft = 10;
-        let spaceFromTop = 45;
+        let size = canvas.width / 20;
+        let spaceBetween = size / 10;
+        let spaceFromLeft = size / 10;
+        let spaceFromTop = (size / 10);
         let maxCols = 3;
         for (let i in this.tankUpgradeOptions) {
 
